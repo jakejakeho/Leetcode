@@ -5,36 +5,36 @@ import java.util.Map;
 
 class Solution {
     public String minWindow(String s, String t) {
-        Map<Character, Integer> map = new HashMap<>();
+        HashMap<Character, Integer> map = new HashMap<>();
 
-        for (char c : s.toCharArray()) {
+        for (char c : t.toCharArray()) {
             map.put(c, map.getOrDefault(c, 0) + 1);
         }
 
         int matched = 0;
-        int start = 0;
+        int windowStart = 0;
         int minLen = s.length() + 1;
-        int subStr = 0;
-        for (int endWindow = 0; endWindow < s.length(); endWindow++) {
-            char right = s.charAt(endWindow);
+        int minStrStart = 0;
+        for (int windowEnd = 0; windowEnd < s.length(); windowEnd++) {
+            char right = s.charAt(windowEnd);
             if (map.containsKey(right)) {
                 map.put(right, map.get(right) - 1);
                 if (map.get(right) == 0) matched++;
             }
 
             while (matched == map.size()) {
-                if (endWindow - start + 1 < minLen) {
-                    minLen = endWindow - start + 1;
-                    subStr = start;
+                if ((windowEnd - windowStart + 1) < minLen) {
+                    minLen = windowEnd - windowStart + 1;
+                    minStrStart = windowStart;
                 }
-                char deleted = s.charAt(start++);
+                char deleted = s.charAt(windowStart++);
                 if (map.containsKey(deleted)) {
                     if (map.get(deleted) == 0) matched--;
                     map.put(deleted, map.get(deleted) + 1);
                 }
             }
         }
-        return minLen > s.length() ? "" : s.substring(subStr, subStr + minLen);
+        return minLen > s.length() ? "" : s.substring(minStrStart, minStrStart + minLen);
     }
 /*    public String minWindow(String s, String t) {
 //        if (s.length() < t.length()) return "";

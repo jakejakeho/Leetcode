@@ -7,23 +7,23 @@ public class Main {
         String s = "ADOBECODEBANC";
         String t = "ABC";
 
-//        System.out.println("Input: s = \"" + s + "\", t = \"" + t + "\"");
-//        System.out.println("Output: (Excepted: \"BANC\")\"" + solution.minWindow(s, t) + "\"");
-//
-//        s = "a";
-//        t = "a";
-//        System.out.println("\nInput: s = \"" + s + "\", t = \"" + t + "\"");
-//        System.out.println("Output: (Excepted: \"a\")\"" + solution.minWindow(s, t) + "\"");
-//
-//        s = "a";
-//        t = "aa";
-//        System.out.println("\nInput: s = \"" + s + "\", t = \"" + t + "\"");
-//        System.out.println("Output: (Excepted: \"\")\"" + solution.minWindow(s, t) + "\"");
-//
-//        s = "abc";
-//        t = "ac";
-//        System.out.println("\nInput: s = \"" + s + "\", t = \"" + t + "\"");
-//        System.out.println("Output: (Excepted: \"abc\")\"" + solution.minWindow(s, t) + "\"");
+        System.out.println("Input: s = \"" + s + "\", t = \"" + t + "\"");
+        System.out.println("Output: (Excepted: \"BANC\")\"" + solution.minWindow(s, t) + "\"");
+
+        s = "a";
+        t = "a";
+        System.out.println("\nInput: s = \"" + s + "\", t = \"" + t + "\"");
+        System.out.println("Output: (Excepted: \"a\")\"" + solution.minWindow(s, t) + "\"");
+
+        s = "a";
+        t = "aa";
+        System.out.println("\nInput: s = \"" + s + "\", t = \"" + t + "\"");
+        System.out.println("Output: (Excepted: \"\")\"" + solution.minWindow(s, t) + "\"");
+
+        s = "abc";
+        t = "ac";
+        System.out.println("\nInput: s = \"" + s + "\", t = \"" + t + "\"");
+        System.out.println("Output: (Excepted: \"abc\")\"" + solution.minWindow(s, t) + "\"");
 
         s = "aaaaaaaaaaaabbbbbcdd";
         t = "abcdd";

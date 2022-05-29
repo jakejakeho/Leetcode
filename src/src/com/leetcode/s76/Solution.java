@@ -6,34 +6,35 @@ import java.util.Map;
 class Solution {
     public String minWindow(String s, String t) {
         Map<Character, Integer> map = new HashMap<>();
+
         for (char c : s.toCharArray()) {
             map.put(c, map.getOrDefault(c, 0) + 1);
         }
 
         int matched = 0;
-        int windowStart = 0;
+        int start = 0;
         int minLen = s.length() + 1;
-        int minWindowStart = 0;
-        for (int windowEnd = 0; windowEnd < s.length(); windowEnd++) {
-            char right = s.charAt(windowEnd);
+        int subStr = 0;
+        for (int endWindow = 0; endWindow < s.length(); endWindow++) {
+            char right = s.charAt(endWindow);
             if (map.containsKey(right)) {
                 map.put(right, map.get(right) - 1);
                 if (map.get(right) == 0) matched++;
             }
 
             while (matched == map.size()) {
-                if (windowEnd - windowStart + 1 < minLen) {
-                    minLen = windowEnd - windowStart + 1;
-                    minWindowStart = windowStart;
+                if (endWindow - start + 1 < minLen) {
+                    minLen = endWindow - start + 1;
+                    subStr = start;
                 }
-                char left = s.charAt(windowStart++);
-                if (map.containsKey(left)) {
-                    if (map.get(left) == 0) matched--;
-                    map.put(left, map.get(left) + 1);
+                char deleted = s.charAt(start++);
+                if (map.containsKey(deleted)) {
+                    if (map.get(deleted) == 0) matched--;
+                    map.put(deleted, map.get(deleted) + 1);
                 }
             }
         }
-        return minLen > s.length() ? "" : s.substring(minWindowStart, minWindowStart + minLen);
+        return minLen > s.length() ? "" : s.substring(subStr, subStr + minLen);
     }
 /*    public String minWindow(String s, String t) {
 //        if (s.length() < t.length()) return "";

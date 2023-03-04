@@ -34,17 +34,23 @@ public class ListNode {
     }
 
     public void print() {
+        System.out.println(this);
+    }
+
+    public String toString() {
+        StringBuffer stringBuffer = new StringBuffer();
         ListNode pointer = this;
-        System.out.print("[");
+        stringBuffer.append("[");
         while (true) {
-            if (pointer.val != null) {System.out.print(pointer.val);}
+            if (pointer.val != null) {stringBuffer.append(pointer.val);}
             if (pointer.next == null) {
                 break;
             } else {
-                System.out.print(", ");
+                stringBuffer.append(", ");
                 pointer = pointer.next;
             }
         }
-        System.out.println("]");
+        stringBuffer.append("]");
+        return stringBuffer.toString();
     }
 }

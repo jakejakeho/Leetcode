@@ -1,21 +1,18 @@
 package src.com.leetcode.s74;
+
 class Solution {
     public boolean searchMatrix(int[][] matrix, int target) {
-        // find vertical first
-        int rows = matrix.length;
-        int columns = matrix[0].length;
-
-        int low = 0;
-        int high = rows * columns;
-        while(high > low) {
-            int mid = (low + high) / 2;
-            int midElement = matrix[mid / columns][mid % columns];
-            if (midElement ==  target) {
+        int numOfElements = matrix.length * matrix[0].length;
+        int left = 0;
+        int right = numOfElements - 1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (matrix[mid / matrix[0].length][mid % matrix[0].length] == target) {
                 return true;
-            } else if (target > midElement) {
-                low = mid + 1;
+            } else if (matrix[mid / matrix[0].length][mid % matrix[0].length] > target) {
+                right = mid - 1;
             } else {
-                high = mid;
+                left = mid + 1;
             }
         }
         return false;
@@ -26,9 +23,9 @@ class Solution {
 
         // test case 1
         int[][] matrix = new int[][]{
-            {1, 3, 5, 7},
-            {10, 11, 16, 20},
-            {23, 30, 34, 60},
+                {1, 3, 5, 7},
+                {10, 11, 16, 20},
+                {23, 30, 34, 60},
         };
         int target = 3;
         boolean result = solution.searchMatrix(matrix, target);
@@ -38,9 +35,9 @@ class Solution {
 
         // test case 2
         matrix = new int[][]{
-            {1, 3, 5, 7},
-            {10, 11, 16, 20},
-            {23, 30, 34, 60},
+                {1, 3, 5, 7},
+                {10, 11, 16, 20},
+                {23, 30, 34, 60},
         };
         target = 13;
         result = solution.searchMatrix(matrix, target);

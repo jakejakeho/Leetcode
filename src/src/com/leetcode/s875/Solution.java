@@ -18,7 +18,7 @@ public class Solution {
     }
 
     private int binarySearch(int[] piles, int start, int end, int target) {
-        while (end > start) {
+        while (start < end) {
             int mid = (start + end) / 2;
             int hoursNeeded = hoursNeeded(piles, mid);
             if (hoursNeeded <= target) {

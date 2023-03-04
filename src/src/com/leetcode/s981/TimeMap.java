@@ -19,29 +19,28 @@ public class TimeMap {
     }
 
     public void set(String key, String value, int timestamp) {
-        List<Pair> timestampList = map.getOrDefault(key, new ArrayList<>());
         Pair newPair = new Pair();
         newPair.key = timestamp;
         newPair.value = value;
-        timestampList.add(newPair);
-        map.put(key, timestampList);
+        List<Pair> list = map.getOrDefault(key, new ArrayList<>());
+        list.add(newPair);
+        map.put(key, list);
     }
 
     public String get(String key, int timestamp) {
-        if (!map.containsKey(key)) return "";
-        List<Pair> timestamps = map.getOrDefault(key, new ArrayList<>());
+        if(!map.containsKey(key)) return "";
+        List<Pair> list = map.getOrDefault(key, new ArrayList<>());
         int left = 0;
-        int right = timestamps.size() - 1;
-        while(left < right) {
+        int right = list.size() - 1;
+        while (left < right) {
             int mid = left + (right - left + 1) / 2;
-            int midTimestamp = timestamps.get(mid).key;
-            if (midTimestamp <= timestamp) {
+            if (list.get(mid).key <= timestamp) {
                 left = mid;
-            }  else {
+            } else {
                 right = mid - 1;
             }
         }
-        return timestamps.get(left).key <= timestamp ? timestamps.get(left).value : "";
+        return list.get(left).key <= timestamp ? list.get(left).value : "";
     }
 
     public static void main(String[] args) {

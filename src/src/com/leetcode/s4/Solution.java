@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         int totalSize = nums1.length + nums2.length;
-        int half = totalSize / 2;
+        int half = (totalSize + 1) / 2;
         int[] a, b;
         if (nums1.length < nums2.length) {
             a = nums1;
@@ -14,11 +14,11 @@ public class Solution {
             b = nums1;
         }
 
-        double result = 0;
+        double result = 0.0;
 
         int left = 0;
         int right = a.length;
-        while (true) {
+        while (left <= right) {
             int i = (left + right) / 2;
             int j = half - i;
 

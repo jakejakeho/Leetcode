@@ -15,9 +15,6 @@ public class Solution {
             fastPointer = fastPointer.next.next;
         }
 
-        System.out.println("slowPointer = " + slowPointer.val);
-        System.out.println("fastPointer = " + fastPointer.val);
-
         // reverse right list
 
         ListNode pointer = slowPointer.next;

@@ -5,24 +5,37 @@ import java.util.Arrays;
 public class Solution {
 
     public int minEatingSpeed(int[] piles, int h) {
-        int left = 1;
-        int right = 0;
+        int maxPile = findMaxPile(piles);
+        return binarySearch(piles, 1, maxPile, h);
+    }
+
+    private int findMaxPile(int[] piles) {
+        int maxPile = 0;
         for (int pile: piles) {
-            right = Math.max(pile, right);
+            maxPile = Math.max(maxPile, pile);
         }
-        while(right > left) {
-            int midK = (left + right) / 2;
-            int hourNeeded = 0;
-            for (int pile: piles) {
-                hourNeeded += Math.ceil((pile + 0.0) / midK);
-            }
-            if (hourNeeded <= h) {
-                right = midK;
+        return maxPile;
+    }
+
+    private int binarySearch(int[] piles, int start, int end, int target) {
+        while (end > start) {
+            int mid = (start + end) / 2;
+            int hoursNeeded = hoursNeeded(piles, mid);
+            if (hoursNeeded <= target) {
+                end = mid;
             } else {
-                left = midK + 1;
+                start = mid + 1;
             }
         }
-        return right;
+        return end;
+    }
+
+    private int hoursNeeded(int[] piles, int k) {
+        int hoursNeeded = 0;
+        for (int pile : piles) {
+            hoursNeeded += Math.ceil((pile + 0.0) / k);
+        }
+        return hoursNeeded;
     }
 
     public static void main(String[] args) {

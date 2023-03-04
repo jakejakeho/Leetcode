@@ -1,79 +1,84 @@
 package src.com.leetcode.s146;
+
+import org.w3c.dom.Node;
+
 import java.util.HashMap;
 
 public class LRUCache {
 
     public static class DoubleLinkedListNode {
 
-        DoubleLinkedListNode next;
+        DoubleLinkedListNode next = null;
 
-        DoubleLinkedListNode prev;
+        DoubleLinkedListNode prev = null;
 
         Integer key;
 
         Integer value;
     }
 
-    DoubleLinkedListNode head = null;
+    DoubleLinkedListNode head;
 
-    DoubleLinkedListNode tail = null;
+     DoubleLinkedListNode tail = null;
 
-    HashMap<Integer, DoubleLinkedListNode> map = new HashMap<>();
+    HashMap<Integer, DoubleLinkedListNode> map;
 
     int capacity;
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
+        map = new HashMap<>();
+        head = new DoubleLinkedListNode();
+        tail = new DoubleLinkedListNode();
+        head.key = 0;
+        head.value = 0;
+        tail.key = 0;
+        tail.value = 0;
+        head.prev = tail;
+        tail.next = head;
     }
 
     public int get(int key) {
+        if (!map.containsKey(key)) return -1;
         DoubleLinkedListNode node = map.get(key);
-        if (node == null) {
-            return -1;
-        } else {
-            DoubleLinkedListNode prev = node.prev;
-            DoubleLinkedListNode next = node.next;
-            if (prev != null && next != null) {
-                prev.next = next;
-                next.prev = prev;
-            }
-            if (tail == node && next != null) {
-                tail = next;
-            }
-            DoubleLinkedListNode currentHead = head;
-            head = node;
-            head.prev = currentHead;
-            head.next = null;
-            currentHead.next = node;
-            return node.value;
-        }
+        delete(node);
+        insert(node);
+        return node.value;
     }
 
     public void put(int key, int value) {
-        boolean isNewNode = !map.containsKey(key);
-        int mapSize = map.size();
-        if (isNewNode && mapSize == capacity) {
-            map.remove(tail.key);
-            tail = tail.next;
+        if (map.containsKey(key))
+            delete(map.get(key));
+        DoubleLinkedListNode newNode = new DoubleLinkedListNode();
+        newNode.key = key;
+        newNode.value = value;
+        map.put(key, newNode);
+        insert(newNode);
+
+        if (map.size() > capacity) {
+            DoubleLinkedListNode lru = tail.next;
+            delete(lru);
+            map.remove(lru.key);
         }
-        if (isNewNode) {
-            DoubleLinkedListNode newNode = new DoubleLinkedListNode();
-            newNode.key = key;
-            newNode.value = value;
-            map.put(key, newNode);
-            if (head != null) {
-                DoubleLinkedListNode currentHead = head;
-                newNode.prev = currentHead;
-                currentHead.next = newNode;
-            }
-            head = newNode;
-            if (tail == null) {
-                tail = newNode;
-            }
-        } else {
-            map.get(key).value = value;
-            get(key);
-        }
+    }
+
+    private void delete(DoubleLinkedListNode node) {
+        DoubleLinkedListNode prev = node.prev;
+        DoubleLinkedListNode next = node.next;
+
+        prev.next = next;
+        next.prev = prev;
+    }
+
+    private void insert(DoubleLinkedListNode node) {
+        DoubleLinkedListNode prev = head.prev;
+        DoubleLinkedListNode next = head;
+
+        prev.next = node;
+        next.prev = node;
+
+        node.next = next;
+        node.prev = prev;
     }
 
     public static void main(String[] args) {

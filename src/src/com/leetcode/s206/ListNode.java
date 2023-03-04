@@ -41,6 +41,7 @@ public class ListNode {
         StringBuffer stringBuffer = new StringBuffer();
         ListNode pointer = this;
         stringBuffer.append("[");
+        int i = 0;
         while (true) {
             if (pointer.val != null) {stringBuffer.append(pointer.val);}
             if (pointer.next == null) {
@@ -49,6 +50,8 @@ public class ListNode {
                 stringBuffer.append(", ");
                 pointer = pointer.next;
             }
+            if (i++ >= 1000)
+                break;
         }
         stringBuffer.append("]");
         return stringBuffer.toString();

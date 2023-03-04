@@ -1,4 +1,5 @@
 package src.com.leetcode.s143;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,24 +8,37 @@ import src.com.leetcode.s206.ListNode;
 public class Solution {
 
     public void reorderList(ListNode head) {
-        List<ListNode> nodes = new ArrayList<>();
-        ListNode pointer = head;
-        while (pointer != null) {
-            nodes.add(pointer);
-            pointer = pointer.next;
+        ListNode slowPointer = head;
+        ListNode fastPointer = head.next;
+        while (fastPointer.next != null && slowPointer != null) {
+            slowPointer = slowPointer.next;
+            fastPointer = fastPointer.next.next;
         }
-        int n = nodes.size();
-        pointer = head;
-        for (int i = 0; i < ((n + 1) / 2); i++) {
-            if (i > 0) {
-                pointer.next = nodes.get(i);
 
-                pointer = pointer.next;
-            }
-            pointer.next = nodes.get(n - (i + 1));
-            pointer = pointer.next;
+        System.out.println("slowPointer = " + slowPointer.val);
+        System.out.println("fastPointer = " + fastPointer.val);
+
+        // reverse right list
+
+        ListNode pointer = slowPointer.next;
+        ListNode prev = slowPointer.next = null;
+        while(pointer != null) {
+            ListNode nextNode = pointer.next;
+            pointer.next = prev;
+            prev = pointer;
+            pointer = nextNode;
         }
-        pointer.next = null;
+
+        ListNode leftPointer = head;
+        ListNode rightPointer = fastPointer;
+        while(leftPointer != null && rightPointer != null) {
+            ListNode leftNext = leftPointer.next;
+            ListNode rightNext = rightPointer.next;
+            leftPointer.next = rightPointer;
+            rightPointer.next = leftNext;
+            leftPointer = leftNext;
+            rightPointer = rightNext;
+        }
     }
 
     public static void main(String[] args) {
@@ -35,7 +49,7 @@ public class Solution {
          * Input: head = [1,2,3,4]
          * Output: [1,4,2,3]
          */
-        head = new ListNode(List.of(1, 2, 3, 4));
+        head = new ListNode(List.of(1, 2, 3, 4, 5, 6));
         System.out.print("Input: head = ");
         head.print();
 

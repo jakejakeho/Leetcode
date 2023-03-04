@@ -5,7 +5,24 @@ import java.util.Arrays;
 public class Solution {
 
     public int minEatingSpeed(int[] piles, int h) {
-        return 0;
+        int left = 1;
+        int right = 0;
+        for (int pile: piles) {
+            right = Math.max(pile, right);
+        }
+        while(right > left) {
+            int midK = (left + right) / 2;
+            int hourNeeded = 0;
+            for (int pile: piles) {
+                hourNeeded += Math.ceil((pile + 0.0) / midK);
+            }
+            if (hourNeeded <= h) {
+                right = midK;
+            } else {
+                left = midK + 1;
+            }
+        }
+        return right;
     }
 
     public static void main(String[] args) {

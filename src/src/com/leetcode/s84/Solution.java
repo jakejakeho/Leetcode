@@ -4,20 +4,29 @@ import java.util.Stack;
 
 public class Solution {
     public int largestRectangleArea(int[] heights) {
-        Stack<Integer> stack = new Stack<>();
-        int minHeight = Integer.MAX_VALUE;
-        int largestArea = 0;
-        for (int i = 0 ; i < heights.length; i++) {
-            int width = stack.size() + 1;
-            int newMinHegiht = Math.min(heights[i] ,minHeight);
-            int newArea = width * newMinHegiht;
-            if (newArea > largestArea) {
-                minHeight = newMinHegiht;
-                largestArea = newArea;
-                stack.push(heights[i]);
+        int area = 0, n = heights.length;
+        int start;
+        Stack<Integer[]> stack = new Stack<>();
+        for (int i = 0; i < heights.length; i++) {
+            int currentHeight = heights[i];
+            start = i;
+            while(!stack.isEmpty() && stack.peek()[1] > currentHeight) {
+                Integer[] pair = stack.pop();
+                int index = pair[0];
+                int height = pair[1];
+                area = Math.max(area, height * (i - index));
+                start = index;
             }
+            stack.push(new Integer[]{ start, currentHeight });
         }
-        return stack.size();
+
+        while(!stack.isEmpty()) {
+            Integer[] pair = stack.pop();
+            int index = pair[0];
+            int height = pair[1];
+            area = Math.max(area, height * (n - index));
+        }
+        return area;
     }
 
     public static void main(String[] args) {

@@ -4,24 +4,32 @@ import java.util.*;
 
 public class Solution347 {
     public int[] topKFrequent(int[] nums, int k) {
-        // number, count
-        HashMap<Integer, Integer> hashMap = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            hashMap.put(nums[i], hashMap.getOrDefault(nums[i], 0) + 1);
+        Map<Integer, Integer> count = new HashMap<>();
+        for (int num : nums) {
+            count.merge(num, 1, Integer::sum);
         }
 
-        int[][] results = new int[hashMap.values().size()][2];
-        int entryIndex = 0;
-        for (HashMap.Entry<Integer, Integer> entry : hashMap.entrySet()) {
-            results[entryIndex][0] = entry.getKey();
-            results[entryIndex][1] = entry.getValue();
-            entryIndex++;
+        ArrayList<Integer>[] frequencies = new ArrayList[nums.length + 1];
+        for (Map.Entry<Integer, Integer> entry : count.entrySet()) {
+            int key = entry.getKey();
+            int frequency = entry.getValue();
+            if (frequencies[frequency] == null) {
+                frequencies[frequency] = new ArrayList<>();
+            }
+            frequencies[frequency].add(key);
         }
 
-        Arrays.sort(results, Comparator.comparingInt(o -> o[1]));
+        int index = 0;
         int[] result = new int[k];
-        for (int i = 0; i < k; i++) {
-            result[i] = results[results.length - i - 1][0];
+        for (int frequency = nums.length; frequency > 0; frequency--) {
+            ArrayList<Integer> keys = frequencies[frequency];
+            if (keys != null) {
+                for (Integer key : keys) {
+                    result[index++] = key;
+                    if (index == k)
+                        return result;
+                }
+            }
         }
         return result;
     }

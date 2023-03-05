@@ -8,7 +8,7 @@ public class Main1 {
         Solution1 solution1 = new Solution1();
 
         int[] nums = { -1,-2,-3,-4,-5 };
-        Integer target = -8;
+        int target = -8;
 
         System.out.println("Input: nums = " + Arrays.toString(nums) + ", target = " + target + "\nOutput: " + Arrays.toString(solution1.twoSum(nums, target)));
     }

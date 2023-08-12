@@ -13,33 +13,24 @@ class Solution {
     }
 
     public List<List<String>> partition(String s) {
-        List<List<String>> answer = new ArrayList<>();
-        recursive(s, answer, 0, 1);
-        return answer;
-    }
-
-    private void recursive(String s, List<List<String>> answer, int index, int numOfPart) {
-        if (s.length() == 1) {
-            answer.add(List.of(s));
-            return;
+        List<List<String>> res = new ArrayList<>();
+        if (s.equals("")) {
+            res.add(new ArrayList<String>());
+            return res;
         }
-        if (numOfPart > s.length()) {
-            return;
-        }
-        for (int i = index; i < s.length(); i++) {
-            int midIndex = Math.min(s.length() - 1, index + numOfPart);
-            String firstPart = s.substring(index, midIndex);
-            boolean isFirstPartPalindrome = isPalindrome(firstPart);
-            if (!isFirstPartPalindrome) continue;
-            String secondPart = s.substring(midIndex, Math.min(midIndex + 1, s.length()));
-            for (int j = 1; j <= secondPart.length(); j++) {
-                recursive(s, answer, index + 1, j);
+        for (int i = 0; i < s.length(); i++) {
+            if (isPalindrome(s, i + 1)) {
+                for (List<String> list : partition(s.substring(i + 1))) {
+                    list.add(0, s.substring(0, i + 1));
+                    res.add(list);
+                }
             }
         }
+        return res;
     }
-    private boolean isPalindrome(String s) {
-        if (s.length() == 1) return true;
-        for (int i = 0; i < Math.round(s.length() / 2.0); i++) {
+
+    private boolean isPalindrome(String s, int n) {
+        for (int i = 0; i < n / 2.0; i++) {
             if (s.charAt(i) != s.charAt(s.length() - 1 - i)) {
                 return false;
             }

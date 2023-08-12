@@ -1,24 +1,31 @@
 package src.com.leetcode.s11;
 
+import java.util.Arrays;
+
 public class Solution {
 
     public int maxArea(int[] height) {
-        int left = 0;
-        int right = height.length - 1;
         int maxArea = 0;
-        while (left < right) {
-            int leftHeight = height[left];
-            int rightHeight = height[right];
-            int currentHeight = Math.min(leftHeight, rightHeight);
-            int width = right - left;
-            int area = currentHeight * width;
+        int leftPointer = 0;
+        int rightPointer = height.length - 1;
+        while(leftPointer < rightPointer) {
+            int w = rightPointer - leftPointer;
+            int h = Math.min(height[leftPointer], height[rightPointer]);
+            int area = w * h;
             maxArea = Math.max(area, maxArea);
-            if (leftHeight >= rightHeight) {
-                right--;
+            if (height[leftPointer] < height[rightPointer]) {
+                leftPointer++;
             } else {
-                left++;
+                rightPointer--;
             }
         }
         return maxArea;
+    }
+
+    public static void main(String[] args) {
+        int[] height = new int[]{1, 3, 2, 5, 25, 24, 5};
+        Solution solution = new Solution();
+        System.out.println("Input: " + Arrays.toString(height));
+        System.out.println("Output: " + solution.maxArea(height));
     }
 }

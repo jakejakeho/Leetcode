@@ -1,7 +1,7 @@
 package src.com.leetcode.s802;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 class Solution {
 
@@ -22,67 +22,32 @@ class Solution {
     }
 
     private List<Integer> findSafeNodes(int[][] graph) {
-        List<Integer> safeNodes = new ArrayList<>();
         Boolean[] isCanReachTerminal = new Boolean[graph.length];
-        for (int i = 0; i < graph.length; i++) {
-            if (isTerminal(graph[i])) {
-                isCanReachTerminal[i] = true;
-            }
-        }
 
-        boolean[] isSafeNodes = new boolean[graph.length];
-        for (int i = 0; i < graph.length; i++) {
-            if (isCanReachTerminal[i] == null) {
-                boolean[] visited = new boolean[graph.length];
-                isCanReachTerminal[i] = canReachTerminal(i, graph, visited, isCanReachTerminal);
-                //System.out.println("checking node = " + i + " isCanReachTerminal[edge.val] = " +
-                // isCanReachTerminal[i]);
-            }
-            if (Boolean.TRUE.equals(isCanReachTerminal[i])) {
-                isSafeNodes[i] = true;
-            }
+        int count = 0;
+        for (int i = graph.length - 1; i >= 0; i--) {
+            isCanReachTerminal[i] = canReachTerminal(i, graph, isCanReachTerminal);
+            if (isCanReachTerminal[i]) count++;
         }
-        for (int i = 0; i < isSafeNodes.length; i++) {
-            if (isSafeNodes[i]) {safeNodes.add(i);}
+        List<Integer> safeNodes = new ArrayList<>(count);
+        for (int i = 0; i < graph.length; i++)  {
+            if (isCanReachTerminal[i]) {safeNodes.add(i);}
         }
         return safeNodes;
     }
 
-    private boolean canReachTerminal(int nodeIndex, int[][] graph, boolean[] visited, Boolean[] isCanReachTerminal) {
-        if (isCanReachTerminal[nodeIndex] == null) {
-            if (isTerminal(graph[nodeIndex])) {
-                isCanReachTerminal[nodeIndex] = true;
-                //System.out.println("reached terminal = " + nodeIndex);
-                return true;
-            }
-
-            boolean isAllEdgesCanReachTerminal = true;
-            int[] edges = graph[nodeIndex];
+    private boolean canReachTerminal(int nodeIndex, int[][] graph, Boolean[] isCanReachTerminal) {
+        if (Objects.isNull(isCanReachTerminal[nodeIndex])) {
             //System.out.println("checking edges for node " + nodeIndex);
-            for (int edge : edges) {
-                if (!visited[edge]) {
-                    visited[nodeIndex] = true;
-                    boolean canReach = canReachTerminal(edge, graph, visited, isCanReachTerminal);
-                    if (!canReach) {
-                        isAllEdgesCanReachTerminal = false;
-                        break;
-                    }
-                    visited[nodeIndex] = false;
-                } else {
-                    if (!isTerminal(graph[edge])) {
-                        isAllEdgesCanReachTerminal = false;
-                        break;
-                    }
+            isCanReachTerminal[nodeIndex] = false;
+            for (int edge : graph[nodeIndex]) {
+                if (Boolean.FALSE.equals(isCanReachTerminal[edge]) || !canReachTerminal(edge, graph,
+                    isCanReachTerminal)) {
+                    return isCanReachTerminal[nodeIndex];
                 }
             }
-            isCanReachTerminal[nodeIndex] = isAllEdgesCanReachTerminal;
-            return isAllEdgesCanReachTerminal;
-        } else {
-            return isCanReachTerminal[nodeIndex];
+            isCanReachTerminal[nodeIndex] = true;
         }
-    }
-
-    private boolean isTerminal(int[] edges) {
-        return edges.length == 0;
+        return isCanReachTerminal[nodeIndex];
     }
 }

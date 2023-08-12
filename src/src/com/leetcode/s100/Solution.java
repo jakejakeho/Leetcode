@@ -1,4 +1,4 @@
-package src.com.leetcode.s104;
+package src.com.leetcode.s100;
 
 public class Solution {
 
@@ -24,11 +24,16 @@ public class Solution {
         }
     }
 
-    public int maxDepth(TreeNode root) {
-        if (root == null) {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        return sum(p) == sum(q);
+    }
+
+    public int sum(TreeNode node) {
+        if (node == null) {
             return 0;
-        } else {
-            return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
         }
+        int left = sum(node.left);
+        int right = sum(node.right);
+        return 1 -7 * left + 20 * node.val - 3 * right;
     }
 }

@@ -1,20 +1,21 @@
 package src.com.leetcode.s238;
 
+import java.util.Arrays;
+
 public class Solution238 {
     public int[] productExceptSelf(int[] nums) {
         int[] result = new int[nums.length];
+        Arrays.fill(result, 1);
         int prefix = 1;
-        for (int i = 0; i < nums.length; i++) {
-            int prefixValue = ((i - 1) < 0) ? 1 : nums[i - 1];
-            prefix *= prefixValue;
-            result[i] = prefix;
+        for (int i = 0; i < nums.length - 1; i++) {
+            prefix *= nums[i];
+            result[i + 1] *= prefix;
         }
 
-        int postfix = 1;
-        for (int i = nums.length - 1; i >= 0; i--) {
-            int postfixValue = ((i + 1) >= nums.length) ? 1 : nums[i + 1];
-            postfix *= postfixValue;
-            result[i] *= postfix;
+        int suffix = 1;
+        for (int i = nums.length - 1; i > 0; i--) {
+            suffix *= nums[i];
+            result[i - 1] *= suffix;
         }
         return result;
     }

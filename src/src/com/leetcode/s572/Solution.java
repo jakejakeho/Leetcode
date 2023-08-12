@@ -1,4 +1,4 @@
-package src.com.leetcode.s100;
+package src.com.leetcode.s572;
 
 public class Solution {
 
@@ -24,19 +24,25 @@ public class Solution {
         }
     }
 
-    public boolean isSameTree(TreeNode p, TreeNode q) {
-        return dfs(p,q);
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if (root == null || subRoot == null) {
+            return false;
+        }
+        if (isSameTree(root, subRoot)) {
+            return true;
+        }
+        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
     }
 
-    public boolean dfs(TreeNode p, TreeNode q) {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
         if (p == null && q == null) {
             return true;
         }
         if (p == null || q == null) {
             return false;
         }
-        boolean left = dfs(p.left, q.left);
-        boolean right = dfs(p.right, q.right);
-        return p.val == q.val && left && right;
+        if (p.val == q.val)
+            return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        return false;
     }
 }

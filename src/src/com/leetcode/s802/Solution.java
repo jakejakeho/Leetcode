@@ -25,6 +25,12 @@ class Solution {
         List<Integer> safeNodes = new ArrayList<>();
         Boolean[] isCanReachTerminal = new Boolean[graph.length];
         for (int i = 0; i < graph.length; i++) {
+            if (isTerminal(graph[i])) {
+                isCanReachTerminal[i] = true;
+            }
+        }
+
+        for (int i = 0; i < graph.length; i++) {
             if (isCanReachTerminal[i] == null) {
                 boolean[] visited = new boolean[graph.length];
                 isCanReachTerminal[i] = canReachTerminal(i, graph, visited, isCanReachTerminal);
@@ -53,7 +59,6 @@ class Solution {
                 if (!visited[edge]) {
                     visited[nodeIndex] = true;
                     boolean canReach = canReachTerminal(edge, graph, visited, isCanReachTerminal);
-                    isCanReachTerminal[edge] = canReach;
                     if (!canReach) {
                         isAllEdgesCanReachTerminal = false;
                         break;
@@ -66,6 +71,7 @@ class Solution {
                     }
                 }
             }
+            isCanReachTerminal[nodeIndex] = isAllEdgesCanReachTerminal;
             return isAllEdgesCanReachTerminal;
         } else {
             return isCanReachTerminal[nodeIndex];

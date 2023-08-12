@@ -10,7 +10,9 @@ class Solution {
 
         int total = 0;
         while(leftPointer < rightPointer) {
-            if (height[leftPointer] <= height[rightPointer]) {
+            int leftHeight = height[leftPointer];
+            int rightHeight = height[rightPointer];
+            if (leftHeight <= rightHeight) {
                 leftPointer++;
                 maxLeft = Math.max(height[leftPointer], maxLeft);
                 total += maxLeft - height[leftPointer];

@@ -6,7 +6,7 @@ public class Solution {
     public boolean isPalindrome(String s) {
         int left = 0;
         int right = s.length() - 1;
-        while (left <= right) {
+        while(left < right) {
             Character leftChar = Character.toLowerCase(s.charAt(left));
             Character rightChar = Character.toLowerCase(s.charAt(right));
             if (!isAlphanumeric(leftChar)) {
@@ -17,15 +17,17 @@ public class Solution {
                 right--;
                 continue;
             }
-            if (!Objects.equals(leftChar, rightChar))
+            if (!Objects.equals(leftChar, rightChar)) {
                 return false;
-            left++;
-            right--;
+            } else {
+                left++;
+                right--;
+            }
         }
         return true;
     }
 
-    private boolean isAlphanumeric(Character testChar) {
-        return (testChar >= 'a' && testChar <= 'z') || (testChar >= '0' && testChar <= '9');
+    private boolean isAlphanumeric(Character c) {
+        return (c >= 'a' && c <='z') || (c >= '0' && c <= '9');
     }
 }

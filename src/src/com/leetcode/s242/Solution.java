@@ -2,19 +2,17 @@ package src.com.leetcode.s242;
 
 public class Solution {
     public boolean isAnagram(String s, String t) {
-        int[] charCount = new int[26];
-        for (char sChar : s.toCharArray()) {
-            charCount[sChar - 'a']--;
+        int[] sCount = new int[26];
+        int[] tCount = new int[26];
+        for (int i = 0 ;i < s.length(); i++) {
+            sCount[s.charAt(i) - 'a']++;
         }
-
-        for (char tChar : t.toCharArray()) {
-            charCount[tChar - 'a']++;
+        for (int i = 0 ;i < t.length(); i++) {
+            tCount[t.charAt(i) - 'a']++;
         }
-
-        for (int count : charCount) {
-            if (count != 0) {
+        for (int i = 0; i < sCount.length; i++) {
+            if (sCount[i] != tCount[i])
                 return false;
-            }
         }
         return true;
     }

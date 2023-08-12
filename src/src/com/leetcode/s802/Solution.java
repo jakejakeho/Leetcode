@@ -30,17 +30,21 @@ class Solution {
             }
         }
 
+        boolean[] isSafeNodes = new boolean[graph.length];
         for (int i = 0; i < graph.length; i++) {
             if (isCanReachTerminal[i] == null) {
                 boolean[] visited = new boolean[graph.length];
                 isCanReachTerminal[i] = canReachTerminal(i, graph, visited, isCanReachTerminal);
-                //System.out.println("checking node = " + i + " isCanReachTerminal[edge.val] = " + isCanReachTerminal[i]);
+                //System.out.println("checking node = " + i + " isCanReachTerminal[edge.val] = " +
+                // isCanReachTerminal[i]);
             }
             if (Boolean.TRUE.equals(isCanReachTerminal[i])) {
-                safeNodes.add(i);
+                isSafeNodes[i] = true;
             }
         }
-        Collections.sort(safeNodes);
+        for (int i = 0; i < isSafeNodes.length; i++) {
+            if (isSafeNodes[i]) {safeNodes.add(i);}
+        }
         return safeNodes;
     }
 

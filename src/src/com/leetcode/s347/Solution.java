@@ -4,19 +4,23 @@ import java.util.*;
 
 public class Solution {
     public int[] topKFrequent(int[] nums, int k) {
-        HashMap<Integer, Integer> countMap = new HashMap<>();
-        for (int num : nums) {
-            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
-        }
-
-        PriorityQueue<Map.Entry<Integer, Integer>> priorityQueue = new PriorityQueue<>(Map.Entry.comparingByValue(Comparator.reverseOrder()));
-        priorityQueue.addAll(countMap.entrySet());
-
-        int[] result = new int[k];
-        for (int i = 0; i < k; i++) {
-            result[i] = Objects.requireNonNull(priorityQueue.poll()).getKey();
-        }
-        return result;
+       HashMap<Integer, Integer> countMap = new HashMap<>();
+       for (int num : nums) {
+           countMap.putIfAbsent(num, 0);
+           countMap.put(num, countMap.get(num) + 1);
+       }
+       PriorityQueue<Map.Entry<Integer, Integer>> priorityQueue = new PriorityQueue<>(Map.Entry.comparingByValue());
+       for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
+           priorityQueue.offer(entry);
+           if (priorityQueue.size() > k) {
+               priorityQueue.poll();
+           }
+       }
+       int[] result = new int[k];
+       for (int i = 0; i < k; i++) {
+           result[i] = priorityQueue.poll().getKey();
+       }
+       return result;
     }
 
     public static void main(String[] args) {

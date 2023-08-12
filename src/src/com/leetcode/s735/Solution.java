@@ -18,7 +18,6 @@ class Solution {
         for (int i = 0; i < n; i++) {
             int asteroid = asteroids[i];
             while (j > 0 && asteroids[j - 1] > 0 && asteroid < 0 && asteroids[j - 1] < Math.abs(asteroid)) {
-                System.out.println("j = " + j);
                 j--;
             }
 

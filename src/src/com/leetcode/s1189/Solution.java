@@ -1,45 +1,30 @@
 package src.com.leetcode.s1189;
 
-import java.util.HashMap;
-
 class Solution {
     public int maxNumberOfBalloons(String text) {
-        HashMap<Character, Integer> balloonMap = getBalloonMap();
-        char[] textCharArray = text.toCharArray();
-        int numOfBalloons = 0;
-        for (char c : textCharArray) {
-            removeChar(balloonMap, c);
-            if (isEmpty(balloonMap)) {
-                numOfBalloons++;
-                balloonMap = getBalloonMap();
-            }
+        int[] countMap = new int[26];
+        char[] charArray = text.toCharArray();
+        for (char c : charArray) {
+            countMap[c - 'a']++;
         }
-        return numOfBalloons;
-    }
 
-    private HashMap<Character, Integer> getBalloonMap() {
-        HashMap<Character, Integer> balloonMap = new HashMap<>();
-        String balloon = "balloon";
-        char[] balloonCharArray = balloon.toCharArray();
-        for (char c : balloonCharArray) {
-            balloonMap.put(c, balloonMap.getOrDefault(c, 0) + 1);
+        String BALLOON = "balloon";
+        int[] balloonMap = new int[26];
+        char[] charArray2 = BALLOON.toCharArray();
+        for (char c : charArray2) {
+            balloonMap[c - 'a']++;
         }
-        return balloonMap;
-    }
 
-    private void removeChar(HashMap<Character, Integer> balloonMap, char removeChar) {
-        if (balloonMap.containsKey(removeChar)) {
-            int count = balloonMap.get(removeChar);
-            count--;
-            if (count == 0) {
-                balloonMap.remove(removeChar);
-            } else {
-                balloonMap.put(removeChar, count);
-            }
+        int maxNumber = Integer.MAX_VALUE;
+        for (int i = 0; i < 26; i++) {
+            int balloonCount = balloonMap[i];
+            if (balloonCount == 0) continue;
+            int textCount = countMap[i];
+            int available = Math.floorDiv(textCount, balloonCount);
+            if (available == 0)
+                return 0;
+            maxNumber = Math.min(maxNumber, available);
         }
-    }
-
-    private boolean isEmpty(HashMap<Character, Integer> balloonMap) {
-        return balloonMap.isEmpty();
+        return maxNumber;
     }
 }

@@ -24,12 +24,9 @@ public class Solution {
         if (root == null) {
             return null;
         }
-
-        TreeNode tempNode = root.left;
-        root.left = root.right;
-        root.right = tempNode;
-        invertTree(root.left);
-        invertTree(root.right);
+        TreeNode temp = root.right;
+        root.right = invertTree(root.left);
+        root.left = invertTree(temp);
         return root;
     }
 }

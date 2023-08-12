@@ -1,6 +1,6 @@
 package src.com.leetcode.s554;
+
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 class Solution {
@@ -21,10 +21,6 @@ class Solution {
 
     public int leastBricks(List<List<Integer>> wall) {
         int height = wall.size();
-        int width = 0;
-        for (int brickSize : wall.get(0)) {
-            width += brickSize;
-        }
 
         HashMap<Integer, Integer> numOfGaps = new HashMap<>();
         for (int i = 0; i < height; i++) {
@@ -38,13 +34,12 @@ class Solution {
             }
         }
 
-        int leastBrick = Integer.MAX_VALUE;
-        for (int i = 0; i < Math.max(1, width - 1); i++) {
-            int numOfBricks = height - numOfGaps.getOrDefault(i, 0);
-            if (numOfBricks < leastBrick) {
-                leastBrick = numOfBricks;
+        int maxGaps = 0;
+        for (Integer gap: numOfGaps.values()) {
+            if (gap > maxGaps) {
+                maxGaps = gap;
             }
         }
-        return leastBrick;
+        return height - maxGaps;
     }
 }

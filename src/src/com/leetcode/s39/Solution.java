@@ -11,27 +11,26 @@ class Solution {
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList<>();
-        combinationSum(candidates, target, result, new ArrayList<>(), 0);
+        combinationSum(candidates, target, result, new ArrayList<>(), 0, 0);
         return result;
     }
 
     private void combinationSum(int[] candidates, int target, List<List<Integer>> result, List<Integer> currentList,
-                                int currentIndex) {
-        int sum = 0;
-        for (Integer integer : currentList) {
-            sum += integer;
-        }
-        if (sum == target) {
+                                int total, int currentIndex) {
+        if (target == total) {
             result.add(new ArrayList<>(currentList));
+            return;
         }
 
-        if (currentIndex >= candidates.length)
-            return;
-        // add this num;
-        currentList.add(candidates[currentIndex]);
-        combinationSum(candidates, target, result, currentList, currentIndex + 1);
-        // don't add this num
-        currentList.remove(Integer.valueOf(candidates[currentIndex]));
-        combinationSum(candidates, target, result, currentList, currentIndex + 1);
+        if (total > target || currentIndex >= candidates.length) {return;}
+
+        // include this value
+        int candidate = candidates[currentIndex];
+        currentList.add(candidate);
+        combinationSum(candidates, target, result, currentList, total + candidate, currentIndex);
+
+        // don't include this value
+        currentList.remove(Integer.valueOf(candidate));
+        combinationSum(candidates, target, result, currentList, total, currentIndex + 1);
     }
 }

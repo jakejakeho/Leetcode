@@ -10,15 +10,15 @@ class Solution {
 
         int total = 0;
         while(leftPointer < rightPointer) {
-            if (height[leftPointer] <= height[rightPointer]) {
-                leftPointer++;
-                maxLeft = Math.max(height[leftPointer], maxLeft);
-                total += maxLeft - height[leftPointer];
-            } else {
-                rightPointer--;
-                maxRight = Math.max(height[rightPointer], maxRight);
-                total += maxRight - height[rightPointer];
-            }
+         if (height[leftPointer] <= height[rightPointer]) {
+             leftPointer++;
+             maxLeft = Math.max(maxLeft, height[leftPointer]);
+             total += maxLeft - height[leftPointer];
+         } else {
+             rightPointer--;
+             maxRight = Math.max(maxRight, height[rightPointer]);
+             total += maxRight - height[rightPointer];
+         }
         }
         return total;
     }

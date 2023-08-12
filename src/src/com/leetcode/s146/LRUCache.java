@@ -1,84 +1,92 @@
 package src.com.leetcode.s146;
 
-import org.w3c.dom.Node;
-
 import java.util.HashMap;
 
 public class LRUCache {
 
-    public static class DoubleLinkedListNode {
+    class DoublyLinkedListNode {
 
-        DoubleLinkedListNode next = null;
+        DoublyLinkedListNode next;
 
-        DoubleLinkedListNode prev = null;
+        DoublyLinkedListNode prev;
 
-        Integer key;
+        int key;
 
-        Integer value;
+        int val;
     }
 
-    DoubleLinkedListNode head;
+    private int size;
 
-     DoubleLinkedListNode tail = null;
+    private DoublyLinkedListNode head;
 
-    HashMap<Integer, DoubleLinkedListNode> map;
+    private DoublyLinkedListNode tail;
 
-    int capacity;
+    private HashMap<Integer, DoublyLinkedListNode> hashMap = new HashMap<>();
 
-    public LRUCache(int capacity) {
-        this.capacity = capacity;
-        map = new HashMap<>();
-        head = new DoubleLinkedListNode();
-        tail = new DoubleLinkedListNode();
-        head.key = 0;
-        head.value = 0;
-        tail.key = 0;
-        tail.value = 0;
-        head.prev = tail;
-        tail.next = head;
-    }
+    private int currentSize = 0;
 
-    public int get(int key) {
-        if (!map.containsKey(key)) return -1;
-        DoubleLinkedListNode node = map.get(key);
-        delete(node);
-        insert(node);
-        return node.value;
+    LRUCache(int size) {
+        this.size = size;
     }
 
     public void put(int key, int value) {
-        if (map.containsKey(key))
-            delete(map.get(key));
-        DoubleLinkedListNode newNode = new DoubleLinkedListNode();
-        newNode.key = key;
-        newNode.value = value;
-        map.put(key, newNode);
-        insert(newNode);
+        if (!hashMap.containsKey(key)) {
+            DoublyLinkedListNode newNode = new DoublyLinkedListNode();
+            hashMap.put(key, newNode);
+            newNode.key = key;
+            newNode.val = value;
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
+                currentSize = 1;
+                return;
+            }
 
-        if (map.size() > capacity) {
-            DoubleLinkedListNode lru = tail.next;
-            delete(lru);
-            map.remove(lru.key);
+            if (currentSize + 1 > size) {
+                evict();
+            }
+
+            currentSize++;
+            if (tail != null) {
+                tail.next = newNode;
+                newNode.prev = tail;
+            } else {
+                head = newNode;
+            }
+            tail = newNode;
+        } else {
+            get(key);
+            hashMap.get(key).val = value;
         }
     }
 
-    private void delete(DoubleLinkedListNode node) {
-        DoubleLinkedListNode prev = node.prev;
-        DoubleLinkedListNode next = node.next;
-
-        prev.next = next;
-        next.prev = prev;
+    public int get(int key) {
+        DoublyLinkedListNode node = hashMap.get(key);
+        if (node == null) {return -1;}
+        if (node == tail) {return node.val;}
+        if (node == head) {
+            head = head.next;
+            head.prev = null;
+        } else if (node != tail) {
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+        }
+        tail.next = node;
+        node.prev = tail;
+        tail = node;
+        return node.val;
     }
 
-    private void insert(DoubleLinkedListNode node) {
-        DoubleLinkedListNode prev = head.prev;
-        DoubleLinkedListNode next = head;
-
-        prev.next = node;
-        next.prev = node;
-
-        node.next = next;
-        node.prev = prev;
+    public void evict() {
+        hashMap.remove(head.key);
+        if (head == tail) {
+            head = null;
+            tail = null;
+        } else {
+            head = head.next;
+            head.prev = null;
+        }
+        currentSize -= 1;
     }
 
     public static void main(String[] args) {
@@ -102,15 +110,33 @@ public class LRUCache {
          * lRUCache.get(4);    // return 4
          */
 
-        LRUCache lRUCache = new LRUCache(2);
-        lRUCache.put(1, 1); // cache is {1=1}
-        lRUCache.put(2, 2); // cache is {1=1, 2=2}
-        System.out.println("return 1 -> " + lRUCache.get(1));    // return 1
-        lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
-        System.out.println("return -1 -> " + lRUCache.get(2));    // returns -1 (not found)
-        lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
-        System.out.println("return -1 -> " + lRUCache.get(1));    // return -1 (not found)
-        System.out.println("return 3 -> " + lRUCache.get(3));    // return 3
-        System.out.println("return 4 -> " + lRUCache.get(4));    // return 4
+        int testCase = 2;
+        if (testCase == 0) {
+            LRUCache lRUCache = new LRUCache(2);
+            lRUCache.put(1, 1); // cache is {1=1}
+            lRUCache.put(2, 2); // cache is {1=1, 2=2}
+            System.out.println("return 1 -> " + lRUCache.get(1));    // return 1
+            lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
+            System.out.println("return -1 -> " + lRUCache.get(2));    // returns -1 (not found)
+            lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
+            System.out.println("return -1 -> " + lRUCache.get(1));    // return -1 (not found)
+            System.out.println("return 3 -> " + lRUCache.get(3));    // return 3
+            System.out.println("return 4 -> " + lRUCache.get(4));    // return 4
+        } else if (testCase == 1) {
+            LRUCache lRUCache = new LRUCache(1);
+            lRUCache.put(2, 1); // cache is {2=1}
+            System.out.println("return 1 -> " + lRUCache.get(2));    // return 1
+            lRUCache.put(3, 2); // cache is {3=2}
+            System.out.println("return -1 -> " + lRUCache.get(2));    // return -1
+            System.out.println("return 2 -> " + lRUCache.get(3));    // return 2
+        } else if (testCase == 2) {
+            LRUCache lRUCache = new LRUCache(2);
+            lRUCache.put(2, 1); // cache is {2=1}
+            lRUCache.put(1, 1); // cache is {2=1, 1=1}
+            lRUCache.put(2, 3); // cache is {1=1, 2=3}
+            lRUCache.put(4, 1); // cache is {2=3, 4=1}
+            System.out.println("return -1 -> " + lRUCache.get(1));    // return -1
+            System.out.println("return 3 -> " + lRUCache.get(2));    // return 3
+        }
     }
 }

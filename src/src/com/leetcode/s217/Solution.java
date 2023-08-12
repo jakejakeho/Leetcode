@@ -1,17 +1,18 @@
 package src.com.leetcode.s217;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Solution {
 
     public boolean containsDuplicate(int[] nums) {
-        HashSet<Integer> hashSet = new HashSet<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (hashSet.contains(nums[i]))
-                return true;
-            hashSet.add(nums[i]);
-        }
+       HashMap<Integer, Boolean> exists = new HashMap<>();
+       for (int num:nums) {
+           if (exists.containsKey(num))
+               return true;
+           exists.put(num, true);
+       }
         return false;
     }
 

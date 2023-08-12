@@ -1,5 +1,7 @@
 package src.com.leetcode.s42;
 
+import java.util.Arrays;
+
 class Solution {
     public int trap(int[] height) {
         int leftPointer = 0;
@@ -23,5 +25,12 @@ class Solution {
             }
         }
         return total;
+    }
+
+    public static void main(String[] args) {
+        int[] height = new int[]{0, 2, 0};
+        Solution solution = new Solution();
+        System.out.println("Input: " + Arrays.toString(height));
+        System.out.println("Output: " + solution.trap(height));
     }
 }

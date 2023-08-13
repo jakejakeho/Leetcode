@@ -32,8 +32,6 @@ class Solution {
                 int right = recursive(obstacleGrid, i, j + 1, memo);
                 memo[i][j] = down + right;
                 return memo[i][j];
-            } else {
-                return 0;
             }
         }
         return 0;

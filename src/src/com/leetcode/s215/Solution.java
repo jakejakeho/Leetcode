@@ -2,15 +2,19 @@ package src.com.leetcode.s215;
 
 import java.util.PriorityQueue;
 
-public class Solution {
+class Solution {
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.findKthLargest(new int[] {3, 2, 1, 5, 6, 4}, 2));
+    }
+
     public int findKthLargest(int[] nums, int k) {
         PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (priorityQueue.size() < k) {
-                priorityQueue.offer(nums[i]);
-            } else if (nums[i] > priorityQueue.peek()) {
+        for (int num : nums) {
+            priorityQueue.offer(num);
+            if (priorityQueue.size() > k) {
                 priorityQueue.poll();
-                priorityQueue.add(nums[i]);
             }
         }
         return priorityQueue.peek();

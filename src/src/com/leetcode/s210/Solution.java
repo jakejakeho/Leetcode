@@ -1,7 +1,9 @@
 package src.com.leetcode.s210;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 class Solution {
 
@@ -12,58 +14,56 @@ class Solution {
     }
 
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        List<Integer>[] pres = new ArrayList[numCourses];
-        for (int i = 0; i < pres.length; i++) {
-            pres[i] = new ArrayList<>();
+        List<Integer> orders = new ArrayList<>();
+
+        List<Integer>[] preNeeded = preNeeded(numCourses, prerequisites);
+        boolean[] courseTakenArr = new boolean[numCourses];
+
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < preNeeded.length; i++) {
+            if (preNeeded[i].isEmpty()) {
+                System.out.println("preNeeded[i] = size " + preNeeded[i].size());
+                courseTakenArr[i] = true;
+                queue.offer(i);
+            }
         }
 
-        for (int[] pre : prerequisites) {
-            int course = pre[0];
-            int firstTake = pre[1];
-            pres[course].add(firstTake);
-        }
+        while (!queue.isEmpty()) {
+            int courseTaken = queue.poll();
 
-        boolean[] completed = new boolean[numCourses];
-        Arrays.fill(completed, false);
-        List<Integer> courseSequence = new ArrayList<>();
-        recursive(pres, completed, courseSequence);
-
-        int[] result = new int[numCourses];
-        for (int i = 0; i < courseSequence.size(); i++) {
-            result[i] = courseSequence.get(i);
-        }
-        return result;
-    }
-
-    public void recursive(List<Integer>[] prerequisites, boolean[] completed, List<Integer> courseSequence) {
-        boolean hasCourseToTake = true;
-        while (hasCourseToTake) {
-            boolean reallyHasCourseToTake = false;
-            for (int i = 0; i < prerequisites.length; i++) {
-                if (completed[i]) {continue;}
-                System.out.println(" i = " + i);
-                List<Integer> pre = prerequisites[i];
-                boolean preCompleted = true;
-                for (int preCourse : pre) {
-                    System.out.println("preCourse" + preCourse + !completed[preCourse]);
-                    if (!completed[preCourse]) {
-                        preCompleted = false;
-                        break;
+            orders.add(courseTaken);
+            // remove this course in other pre needed
+            for (int i = 0; i < preNeeded.length; i++) {
+                preNeeded[i].remove(Integer.valueOf(courseTaken));
+                if (preNeeded[i].isEmpty()) {
+                    if (!courseTakenArr[i]) {
+                        queue.offer(i);
+                        courseTakenArr[i] = true;
                     }
-                }
-                if (preCompleted) {
-                    System.out.println("set i cmpleted = " + i);
-                    completed[i] = true;
-                    courseSequence.add(i);
-                    reallyHasCourseToTake = true;
-                    for (int j = 0; j < prerequisites.length; j++) {
-                        List<Integer> preRemove = prerequisites[i];
-                        preRemove.remove(Integer.valueOf(i));
-                    }
-                    break;
                 }
             }
-            hasCourseToTake = reallyHasCourseToTake;
         }
+        if (orders.size() != numCourses) {
+            return new int[]{};
+        }
+        return orders.stream()
+                     .mapToInt(Integer::intValue)
+                     .toArray();
+    }
+
+    public List<Integer>[] preNeeded(int numCourses, int[][] prerequisites) {
+        List<Integer>[] preNeeded = new ArrayList[numCourses];
+
+        for (int i = 0; i < preNeeded.length; i++) {
+            preNeeded[i] = new ArrayList<>();
+        }
+
+        for (int[] prerequisite : prerequisites) {
+            int course = prerequisite[0];
+            int pre = prerequisite[1];
+            System.out.println("course = " + course + " pre = " + pre);
+            preNeeded[course].add(pre);
+        }
+        return preNeeded;
     }
 }

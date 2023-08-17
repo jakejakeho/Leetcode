@@ -1,37 +1,25 @@
 package src.com.leetcode.s239;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
 
 class Solution {
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(Arrays.toString(solution.maxSlidingWindow(new int[] {7, 2, 4}, 2)));
+    }
+
     public int[] maxSlidingWindow(int[] nums, int k) {
-        if (nums == null) {
-            return nums;
+        int[] ans = new int[nums.length - k + 1];
+        int j = 0;
+        Deque<Integer> q = new LinkedList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (!q.isEmpty() && q.peekFirst() < i - k + 1) q.pollFirst();
+            while (!q.isEmpty() && nums[i] > nums[q.peekLast()]) q.pollLast();
+            q.offer(i);
+            if (i >= k - 1) ans[j++] = nums[q.peekFirst()];
         }
-        int n = nums.length;
-        if (n == 0 || k == 0) {
-            return new int[0];
-        }
-
-        int[] result = new int[n - k + 1];
-
-        int windowStart = 0;
-
-        Deque<Integer> deque = new ArrayDeque();
-        for (int windowEnd = 0; windowEnd < nums.length; windowEnd++) {
-            while(!deque.isEmpty() && nums[windowEnd] > nums[deque.getLast()]) {
-                deque.removeLast();
-            }
-            deque.add(windowEnd);
-            if (windowStart > deque.getFirst()) {
-                deque.removeFirst();
-            }
-
-            if ((windowEnd - windowStart + 1) >= k) {
-                result[windowStart] = nums[deque.getFirst()];
-                windowStart++;
-            }
-        }
-
-        return result;
+        return ans;
     }
 }

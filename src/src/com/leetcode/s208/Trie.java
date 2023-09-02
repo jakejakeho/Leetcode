@@ -1,8 +1,17 @@
 package src.com.leetcode.s208;
 
-import java.util.HashMap;
-
 class Trie {
+
+    public static void main(String[] args) {
+        Trie trie = new Trie();
+        trie.insert("apple");
+        System.out.println(trie.search("apple"));   // return True
+        System.out.println(trie.search("app"));     // return False
+        System.out.println(trie.startsWith("app")); // return True
+        trie.insert("app");
+        System.out.println(trie.search("app"));     // return True
+    }
+
     Trie[] trieHashMap;
     boolean isWordEnd;
 
@@ -12,40 +21,38 @@ class Trie {
     }
 
     public void insert(String word) {
-        char[] chars = word.toCharArray();
-        Trie current = this;
-        for (char c : chars) {
-            if (current.trieHashMap[c - 'a'] == null) {
-                current.trieHashMap[c - 'a'] = new Trie();
+        Trie lastTrie = this;
+        for (char c : word.toCharArray()) {
+            if (lastTrie.trieHashMap[c - 'a'] == null) {
+                lastTrie.trieHashMap[c - 'a'] = new Trie();
             }
-            current = current.trieHashMap[c - 'a'];
+            lastTrie = lastTrie.trieHashMap[c - 'a'];
         }
-        current.isWordEnd = true;
+        lastTrie.isWordEnd = true;
     }
 
     public boolean search(String word) {
-        char[] chars = word.toCharArray();
-        Trie current = this;
-        for (char c : chars) {
-            if (current.trieHashMap[c - 'a'] != null) {
-                current = current.trieHashMap[c - 'a'];
-            } else {
+        Trie pointer = this;
+        for (char c : word.toCharArray()) {
+            if (pointer.trieHashMap[c - 'a'] == null) {
                 return false;
+            } else {
+                pointer = pointer.trieHashMap[c - 'a'];
             }
         }
-        return current.isWordEnd;
+        return pointer.isWordEnd;
     }
 
     public boolean startsWith(String prefix) {
-        char[] chars = prefix.toCharArray();
-        Trie current = this;
-        for (char c : chars) {
-            if (current.trieHashMap[c - 'a'] != null) {
-                current = current.trieHashMap[c - 'a'];
-            } else {
+        Trie pointer = this;
+        for (char c : prefix.toCharArray()) {
+            if (pointer.trieHashMap[c - 'a'] == null) {
                 return false;
+            } else {
+                pointer = pointer.trieHashMap[c - 'a'];
             }
         }
         return true;
     }
+
 }

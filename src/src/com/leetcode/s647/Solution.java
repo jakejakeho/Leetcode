@@ -1,4 +1,4 @@
-package src.com.leetcode;
+package src.com.leetcode.s647;
 class Solution {
 
     public int countSubstrings(String s) {

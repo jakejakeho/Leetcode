@@ -5,19 +5,18 @@ import src.com.leetcode.s206.ListNode;
 import java.util.*;
 
 public class Solution {
+
     public boolean hasCycle(ListNode head) {
-        ListNode pointer = head;
-        Set<ListNode> set = new HashSet<>();
-        while(pointer != null) {
-            if (set.contains(pointer)) {
-                return true;
-            } else {
-                set.add(pointer);
-            }
-            pointer = pointer.next;
+        ListNode slowPointer = head;
+        ListNode fastPointer = head;
+        while (fastPointer != null && fastPointer.next != null) {
+            slowPointer = slowPointer.next;
+            fastPointer = fastPointer.next.next;
+            if (slowPointer == fastPointer) {return true;}
         }
         return false;
     }
+
     public static void main(String[] args) {
         Solution solution = new Solution();
         ListNode head = null;

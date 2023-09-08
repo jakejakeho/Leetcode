@@ -1,8 +1,8 @@
 package src.com.leetcode.s92;
-
 import src.com.leetcode.s206.ListNode;
 
 class Solution {
+
     public static void main(String[] args) {
         Solution solution = new Solution();
         ListNode head = new ListNode(1);
@@ -14,40 +14,39 @@ class Solution {
     }
 
     public ListNode reverseBetween(ListNode head, int left, int right) {
-        ListNode leftMostNode = new ListNode(0);
-        leftMostNode.next = head;
-        head = leftMostNode;
-        System.out.println(head);
+        ListNode dummyNode = new ListNode(0);
+        dummyNode.next = head;
+        head = dummyNode;
 
-        int index = 0;
         ListNode pointer = head;
+        ListNode lastNode = null;
         ListNode leftLeftNode = null;
         ListNode leftNode = null;
-        ListNode lastNode = null;
+        int currentIndex = 0;
         while (pointer != null) {
-            System.out.println(pointer.val);
-            if (leftNode != null) {
-                ListNode nextNode = pointer.next; // 4
-                pointer.next = lastNode;// 3 -> 2
-                lastNode = pointer; // 3
-                pointer = nextNode; // 4
-            } else {
-                lastNode = pointer;
+            ListNode nextNode = pointer.next;
+
+            if (currentIndex == right) {
+                if (leftLeftNode != null) {
+                    leftLeftNode.next = pointer;
+                    leftNode.next = pointer.next;
+                    pointer.next = lastNode;
+                }
+                break;
             }
 
+            if (leftNode != null) {
+                pointer.next = lastNode;
+            }
 
-            if (index == left) {
+            if (currentIndex == left) {
                 leftLeftNode = lastNode;
                 leftNode = pointer;
             }
 
-
-            if (index == right) {
-//                leftLeftNode.next = pointer;
-//                leftLeftNode.next = pointer.next;
-                break;
-            }
-            index++;
+            lastNode = pointer;
+            pointer = nextNode;
+            currentIndex++;
         }
         return head.next;
     }

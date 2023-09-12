@@ -1,8 +1,5 @@
 package src.com.leetcode.s1647;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.PriorityQueue;
 
 class Solution {
 
@@ -14,41 +11,23 @@ class Solution {
     }
 
     public int minDeletions(String s) {
-        Map<Character, Integer> frequency = new HashMap<>();
-        char[] charArr = s.toCharArray();
-        for (char c : charArr) {
-            frequency.put(c, frequency.getOrDefault(c, 0) + 1);
+        int[] charCount = new int[26];
+        for (char c : s.toCharArray()) {
+            charCount[c - 'a']++;
         }
 
-        int maxFrequency = 0;
-        for (Map.Entry<Character, Integer> entry : frequency.entrySet()) {
-            maxFrequency = Math.max(entry.getValue(), maxFrequency);
-        }
-        List<Character>[] frequencies = new ArrayList[maxFrequency + 1];
-        for (Map.Entry<Character, Integer> entry : frequency.entrySet()) {
-            if (frequencies[entry.getValue()] == null) {
-                frequencies[entry.getValue()] = new ArrayList<>();
-            }
-            frequencies[entry.getValue()].add(entry.getKey());
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        for (int j : charCount) {
+            if (j != 0) {pq.offer(j);}
         }
 
         int numOfDelete = 0;
-        for (int currentFrequency = 0; currentFrequency < frequencies.length; currentFrequency++) {
-            List<Character> sameFrequencyChars = frequencies[currentFrequency];
-            if (sameFrequencyChars == null) {continue;}
-            List<Character> toRemoves = new ArrayList<>();
-            for (int i = 1; i < sameFrequencyChars.size(); i++) {
-                int resultFrequency = currentFrequency;
-                while (frequencies[resultFrequency] != null && resultFrequency - 1 >= 0) {
-                    resultFrequency--;
-                }
-                numOfDelete += currentFrequency - resultFrequency;
-                toRemoves.add(sameFrequencyChars.get(i));
-                frequencies[resultFrequency] = new ArrayList<>();
-                frequencies[resultFrequency].add(sameFrequencyChars.get(i));
-            }
-            for (Character c : toRemoves) {
-                sameFrequencyChars.remove(c);
+        while (pq.size() > 1) {
+            int frequency = pq.poll();
+            if (frequency > 0 && pq.peek() != null && frequency == pq.peek()) {
+                int resultFrequency = Math.max(0, frequency - 1);
+                numOfDelete += frequency - resultFrequency;
+                pq.offer(resultFrequency);
             }
         }
         return numOfDelete;

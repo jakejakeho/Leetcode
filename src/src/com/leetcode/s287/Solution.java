@@ -4,15 +4,18 @@ import java.util.Arrays;
 
 public class Solution {
     public int findDuplicate(int[] nums) {
-        int bits = 0;
-        for (int i = 0; i < nums.length; i++) {
-            bits = bits ^ nums[i];
-        }
+        int tortoise = 0, hare = 0;
+        do {
+            tortoise = nums[tortoise];
+            hare = nums[nums[hare]];
+        } while(nums[tortoise] != nums[hare]);
 
-        for (int i = 1; i < nums.length; i++) {
-            bits = bits ^ i;
+        int p1 = 0, p2 = tortoise;
+        while (nums[p1] != nums[p2]) {
+            p1 = nums[p1];
+            p2 = nums[p2];
         }
-        return bits;
+        return nums[p1];
     }
 
     public static void main(String[] args) {

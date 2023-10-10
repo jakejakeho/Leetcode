@@ -11,22 +11,21 @@ class Solution {
     }
 
     public int findTargetSumWays(int[] nums, int target) {
-        int sum = 0;
         dp = new HashMap<>();
-        return recursive(nums, target, 0, sum);
+        return recursive(nums, target, 0, 0);
     }
 
     private int recursive(int[] nums, int target, int i, int sum) {
         if (i >= nums.length) {
-            return sum == target ? 1 : 0;
+            return target == sum ? 1 : 0;
         }
-        int count;
-        String cacheKey = i + "_" + sum;
-        if (dp.containsKey(cacheKey)) {
-            return dp.get(cacheKey);
+        String key = i + "_" + sum;
+        Integer result = dp.get(key);
+        if (result != null) {
+            return result;
         }
-        count = recursive(nums, target, i + 1, sum + nums[i]) + recursive(nums, target, i + 1, sum - nums[i]);
-        dp.put(cacheKey, count);
-        return count;
+        int current = recursive(nums, target, i + 1, sum + nums[i]) + recursive(nums, target, i + 1, sum - nums[i]);
+        dp.put(key, current);
+        return current;
     }
 }

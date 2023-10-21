@@ -40,8 +40,8 @@ class Solution {
             }
         }
 
+        int[] temp = new int[n];
         for (int i = 0; i <= k; i++) {
-            int[] temp = new int[n];
             for (int j = 0; j < n; j++) {
                 temp[j] = cheapest[j];
             }
@@ -54,7 +54,9 @@ class Solution {
                     temp[end] = Math.min(temp[end], cheapest[start] + cost);
                 }
             }
+            int[] pointer = cheapest;
             cheapest = temp;
+            temp = pointer;
         }
         return cheapest[dst] == Integer.MAX_VALUE ? -1 : cheapest[dst];
     }

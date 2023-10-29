@@ -2,33 +2,41 @@ package src.com.leetcode.s42;
 
 import java.util.Arrays;
 
+import static java.lang.Math.min;
+
 class Solution {
+
     public int trap(int[] height) {
+        int total = 0;
+
         int leftPointer = 0;
         int rightPointer = height.length - 1;
 
-        int maxLeft = height[leftPointer];
-        int maxRight = height[rightPointer];
+        int leftMax = height[leftPointer];
+        int rightMax = height[rightPointer];
 
-        int total = 0;
-        while(leftPointer < rightPointer) {
-            int leftHeight = height[leftPointer];
-            int rightHeight = height[rightPointer];
-            if (leftHeight <= rightHeight) {
+        while (leftPointer < rightPointer) {
+            if (leftMax < rightMax) {
+                int water = leftMax - height[leftPointer];
+                if (water >= 0) {
+                    total += water;
+                }
                 leftPointer++;
-                maxLeft = Math.max(height[leftPointer], maxLeft);
-                total += maxLeft - height[leftPointer];
+                leftMax = Math.max(leftMax, height[leftPointer]);
             } else {
+                int water = rightMax - height[rightPointer];
+                if (water >= 0) {
+                    total += water;
+                }
                 rightPointer--;
-                maxRight = Math.max(height[rightPointer], maxRight);
-                total += maxRight - height[rightPointer];
+                rightMax = Math.max(rightMax, height[rightPointer]);
             }
         }
         return total;
     }
 
     public static void main(String[] args) {
-        int[] height = new int[]{0, 2, 0};
+        int[] height = new int[] {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
         Solution solution = new Solution();
         System.out.println("Input: " + Arrays.toString(height));
         System.out.println("Output: " + solution.trap(height));

@@ -7,14 +7,20 @@ import java.util.*;
 public class Solution {
 
     public boolean hasCycle(ListNode head) {
-        ListNode slowPointer = head;
-        ListNode fastPointer = head;
-        while (fastPointer != null && fastPointer.next != null) {
-            slowPointer = slowPointer.next;
-            fastPointer = fastPointer.next.next;
-            if (slowPointer == fastPointer) {return true;}
-        }
-        return false;
+        if (head == null) return false;
+       ListNode fastPointer = head.next;
+       ListNode slowPointer = head;
+       while (fastPointer != null && slowPointer != null) {
+           if (fastPointer.next == null) {
+               break;
+           }
+           fastPointer = fastPointer.next.next;
+           slowPointer = slowPointer.next;
+           if (fastPointer == slowPointer) {
+               return true;
+           }
+       }
+       return false;
     }
 
     public static void main(String[] args) {

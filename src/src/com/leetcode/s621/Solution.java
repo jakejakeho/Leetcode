@@ -5,26 +5,40 @@ import java.util.*;
 
 class Solution {
     public int leastInterval(char[] tasks, int n) {
-        if (n == 0) return tasks.length;
-        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
-        Queue<AbstractMap.SimpleEntry<Integer, Integer>> q = new LinkedList<>();
-        int[] arr = new int[26];
-        for (char c : tasks) arr[c - 'A']++;
-        for (int val : arr) if (val > 0) pq.add(val);
-        int time = 0;
-
-        while ((!pq.isEmpty() || !q.isEmpty())) {
-            time++;
-            if (!pq.isEmpty()) {
-                int val = pq.poll();
-                val--;
-                if (val > 0) q.add(new AbstractMap.SimpleEntry<>(val, time + n));
-            }
-
-            if (!q.isEmpty() && q.peek().getValue() == time) pq.add(
-                    q.poll().getKey()
-            );
+        Map<Character, Integer> countMap = new HashMap<>();
+        Map<Character, Integer> nextUseMap = new HashMap<>();
+        for (char task : tasks) {
+            countMap.put(task, countMap.getOrDefault(task, 0) + 1);
+            nextUseMap.putIfAbsent(task, Integer.MIN_VALUE);
         }
-        return time;
+        PriorityQueue<Map.Entry<Character, Integer>> priorityQueue = new PriorityQueue<>(Comparator.comparing(a -> a.getValue()));
+        priorityQueue.addAll(nextUseMap.entrySet());
+        int result = 0;
+        while (!countMap.isEmpty()) {
+            Map.Entry<Character, Integer> nextUse = priorityQueue.peek();
+            System.out.println(nextUse);
+            if (result >= nextUse.getValue()) {
+                nextUse.setValue(result + n + 1);
+                countMap.put(nextUse.getKey(), countMap.get(nextUse.getKey()) - 1);
+                if (countMap.get(nextUse.getKey()) == 0) {
+                    countMap.remove(nextUse.getKey());
+                    priorityQueue.remove(nextUse);
+                }
+            }
+            result++;
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.leastInterval(new char[]{'A', 'A', 'A', 'B', 'B', 'B'}, 2));
+        System.out.println("1======");
+//        System.out.println(solution.leastInterval(new char[]{'A', 'C', 'A', 'B', 'D', 'B'}, 2));
+//        System.out.println("2======");
+//        System.out.println(solution.leastInterval(new char[]{'A', 'A', 'A', 'B', 'B', 'B'}, 2));
+//        System.out.println("3======");
+//        System.out.println(solution.leastInterval(new char[]{'A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'E', 'F', 'G'}, 2));
+//        System.out.println("4======");
     }
 }

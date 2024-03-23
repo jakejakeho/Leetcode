@@ -8,34 +8,42 @@ import src.com.leetcode.s206.ListNode;
 public class Solution {
 
     public void reorderList(ListNode head) {
-        ListNode slowPointer = head;
-        ListNode fastPointer = head.next;
-        while (fastPointer != null && fastPointer.next != null) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode slowPointer = dummy;
+        ListNode fastPointer = dummy;
+        while (fastPointer.next != null) {
             slowPointer = slowPointer.next;
-            fastPointer = fastPointer.next.next;
+            fastPointer = fastPointer.next;
+            if (fastPointer.next != null)
+                fastPointer = fastPointer.next;
+        }
+        if (slowPointer == fastPointer) {
+            return;
         }
 
-        // reverse right list
+        ListNode rightList = fastPointer;
 
-        ListNode pointer = slowPointer.next;
-        ListNode prev = slowPointer.next = null;
-        while(pointer != null) {
+        ListNode lastNode = null;
+        ListNode reverseRightPointer = slowPointer.next;
+        while (reverseRightPointer != null) {
+            ListNode nextNode = reverseRightPointer.next;
+            reverseRightPointer.next = lastNode;
+            lastNode = reverseRightPointer;
+            reverseRightPointer = nextNode;
+        }
+
+        ListNode pointer = head;
+        ListNode rightPointer = rightList;
+        while (rightPointer != null) {
             ListNode nextNode = pointer.next;
-            pointer.next = prev;
-            prev = pointer;
+            pointer.next = rightPointer;
+            ListNode nextRightNode = rightPointer.next;
+            rightPointer.next = nextNode;
+            rightPointer = nextRightNode;
             pointer = nextNode;
         }
-
-        ListNode leftPointer = head;
-        ListNode rightPointer = fastPointer;
-        while(leftPointer != null && rightPointer != null) {
-            ListNode leftNext = leftPointer.next;
-            ListNode rightNext = rightPointer.next;
-            leftPointer.next = rightPointer;
-            rightPointer.next = leftNext;
-            leftPointer = leftNext;
-            rightPointer = rightNext;
-        }
+        pointer.next = null;
     }
 
     public static void main(String[] args) {
@@ -46,12 +54,13 @@ public class Solution {
          * Input: head = [1,2,3,4]
          * Output: [1,4,2,3]
          */
-        head = new ListNode(List.of(1, 2, 3, 4, 5, 6));
+        head = new ListNode(List.of(1));
         System.out.print("Input: head = ");
         head.print();
 
         solution.reorderList(head);
         System.out.print("Output = ");
         head.print();
+
     }
 }

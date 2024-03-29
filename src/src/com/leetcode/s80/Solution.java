@@ -8,14 +8,11 @@ class Solution {
         int duplicateCount = 0;
 
         while (right < nums.length) {
-            if (nums[right] == lastNum && duplicateCount <= 1) {
-                nums[left] = nums[right];
-                left++;
-                duplicateCount++;
-            }
             if (nums[right] != lastNum) {
                 lastNum = nums[right];
                 duplicateCount = 0;
+            }
+            if (duplicateCount <= 1) {
                 nums[left] = nums[right];
                 left++;
                 duplicateCount++;

@@ -1,4 +1,4 @@
-package src.com.leetcode.s100272;
+package src.com.leetcode.s3096;
 
 class Solution {
     public int minimumSubarrayLength(int[] nums, int k) {

@@ -1,27 +1,40 @@
 package src.com.leetcode.s3096;
 
 class Solution {
-    public int minimumSubarrayLength(int[] nums, int k) {
-        int min = Integer.MAX_VALUE;
-        for (int i = 0; i < nums.length; i++) {
-            int sum = 0;
-            for (int j = i; j < nums.length; j++) {
-                sum = sum | nums[j];
-                if (sum >= k) {
-                    min = Math.min(min, j - i + 1);
-                }
+    public int minimumLevels(int[] possible) {
+        int danielPointer = 0;
+        int bobPointer = 1;
+        int numOfDanielPlay = 1;
+        int danielPoints = possible[danielPointer] == 1 ? 1 : -1;
+        int bobPoints = 0;
+        for (int pointer = bobPointer; pointer < possible.length; pointer++) {
+            bobPoints += possible[pointer] == 1 ? 1 : -1;
+        }
+
+        if (danielPoints > bobPoints) {
+            return numOfDanielPlay;
+        }
+
+        while (bobPointer < possible.length) {
+            if (danielPoints > bobPoints) {
+                return numOfDanielPlay;
             }
+
+            int point = possible[bobPointer] == 1 ? 1 : -1;
+            danielPoints += point;
+            bobPoints -= point;
+
+            numOfDanielPlay++;
+            danielPointer++;
+            bobPointer++;
         }
-        if (min == Integer.MAX_VALUE) {
-            return -1;
-        }
-        return min;
+        return -1;
     }
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.minimumSubarrayLength(new int[]{1, 2, 3}, 2));
-        System.out.println(solution.minimumSubarrayLength(new int[]{2, 1, 8}, 10));
-        System.out.println(solution.minimumSubarrayLength(new int[]{1, 2}, 0));
+        System.out.println(solution.minimumLevels(new int[]{1, 0, 1, 0}));
+        System.out.println(solution.minimumLevels(new int[]{1, 1, 1, 1, 1}));
+        System.out.println(solution.minimumLevels(new int[]{0, 0}));
     }
 }

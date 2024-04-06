@@ -4,33 +4,33 @@ import java.util.Stack;
 
 class Solution {
     public String minRemoveToMakeValid(String s) {
-        StringBuilder sb = new StringBuilder(s);
-        Stack<Integer> stack = new Stack<>();
+        char[] charArr = s.toCharArray();
+        int open = 0;
         Stack<Integer> charToDelete = new Stack<>();
-        int currentIndex = 0;
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == '(') {
-                stack.push(currentIndex);
-                currentIndex++;
+                open++;
             } else if (s.charAt(i) == ')') {
-                if (!stack.isEmpty()) {
-                    stack.pop();
-                    currentIndex++;
+                if (open > 0) {
+                    open--;
                 } else {
-                    charToDelete.push(i);
+                    charArr[i] = '*';
                 }
-            } else {
-                currentIndex++;
             }
         }
-        while (!charToDelete.isEmpty()) {
-            sb.deleteCharAt(charToDelete.pop());
+        for (int i = charArr.length - 1; open > 0 && i >= 0; i--) {
+            if (charArr[i] == '(') {
+                charArr[i] = '*';
+                open--;
+            }
         }
-        while (!stack.isEmpty()) {
-            int index = stack.pop();
-            sb.deleteCharAt(index);
+
+        int index = 0;
+        for (int i = 0; i < charArr.length; i++) {
+            if (charArr[i] != '*')
+                charArr[index++] = charArr[i];
         }
-        return sb.toString();
+        return new String(charArr).substring(0, index);
     }
 
     public static void main(String[] args) {

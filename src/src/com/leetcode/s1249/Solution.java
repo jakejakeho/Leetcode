@@ -1,12 +1,9 @@
 package src.com.leetcode.s1249;
 
-import java.util.Stack;
-
 class Solution {
     public String minRemoveToMakeValid(String s) {
         char[] charArr = s.toCharArray();
         int open = 0;
-        Stack<Integer> charToDelete = new Stack<>();
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == '(') {
                 open++;

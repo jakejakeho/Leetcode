@@ -1,4 +1,4 @@
-package src.com.leetcode.weekly.s100242;
+package src.com.leetcode.s3106;
 
 class Solution {
     public String getSmallestString(String s, int k) {

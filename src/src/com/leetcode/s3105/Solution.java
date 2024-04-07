@@ -1,4 +1,4 @@
-package src.com.leetcode.weekly.s100264;
+package src.com.leetcode.s3105;
 
 class Solution {
     public int longestMonotonicSubarray(int[] nums) {

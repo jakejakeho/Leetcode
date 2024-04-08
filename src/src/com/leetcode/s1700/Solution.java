@@ -1,36 +1,32 @@
 package src.com.leetcode.s1700;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
 
 class Solution {
     public int countStudents(int[] students, int[] sandwiches) {
-        Queue<Integer> studentQueue = new LinkedList<>();
-        Stack<Integer> sandwicheStack = new Stack<>();
+        int numOfCircular = 0;
+        int numOfSquare = 0;
         for (int student : students) {
-            studentQueue.offer(student);
-        }
-
-        for (int i = sandwiches.length - 1; i >= 0; i--) {
-            sandwicheStack.push(sandwiches[i]);
-        }
-
-        int numOfTrial = 0;
-        while (!studentQueue.isEmpty()) {
-            int student = studentQueue.poll();
-            if (sandwicheStack.peek() == student) {
-                sandwicheStack.pop();
-                numOfTrial = 0;
-            } else {
-                numOfTrial++;
-                studentQueue.offer(student);
-                if (numOfTrial == studentQueue.size()) {
-                    break;
-                }
+            if (student == 0) {
+                numOfCircular++;
+            } else if (student == 1) {
+                numOfSquare++;
             }
         }
-        return numOfTrial;
+
+        int j = 0;
+        while (numOfCircular > 0 || numOfSquare > 0) {
+            int sandwich = sandwiches[j];
+            if (sandwich == 0 && numOfCircular > 0) {
+                j++;
+                numOfCircular--;
+            } else if (sandwich == 1 && numOfSquare > 0) {
+                j++;
+                numOfSquare--;
+            } else {
+                break;
+            }
+        }
+        return numOfCircular + numOfSquare;
     }
 
     public static void main(String[] args) {

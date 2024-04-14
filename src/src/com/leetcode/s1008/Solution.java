@@ -19,20 +19,7 @@ import src.com.utils.TreeNode;
  */
 class Solution {
     public TreeNode bstFromPreorder(int[] preorder) {
-        TreeNode root = new TreeNode(preorder[0]);
-        for (int i = 1; i < preorder.length; i++) {
-            if (preorder[i] < root.val) {
-                root.left = dfs(preorder, i, Integer.MIN_VALUE, root.val);
-                break;
-            }
-        }
-        for (int i = 1; i < preorder.length; i++) {
-            if (preorder[i] > root.val) {
-                root.right = dfs(preorder, i, root.val, Integer.MAX_VALUE);
-                break;
-            }
-        }
-        return root;
+        return dfs(preorder, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     private TreeNode dfs(int[] preorder, int index, int min, int max) {

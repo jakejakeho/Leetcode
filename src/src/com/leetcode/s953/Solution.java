@@ -18,8 +18,7 @@ class Solution {
             int p2 = priority[word2.charAt(i) - 'a'];
             if (p1 < p2) {
                 return true;
-            }
-            else if (p1 > p2) {
+            } else if (p1 > p2) {
                 return false;
             }
         }
@@ -28,9 +27,8 @@ class Solution {
 
     private int[] createPriority(String order) {
         int[] priority = new int[26];
-        int i = 0;
-        for (char c : order.toCharArray()) {
-            priority[c - 'a'] = i++;
+        for (int i = 0; i < order.length(); i++) {
+            priority[order.charAt(i) - 'a'] = i;
         }
         return priority;
     }

@@ -1,17 +1,25 @@
 package src.com.leetcode.s168;
+
 class Solution {
-
     public String convertToTitle(int columnNumber) {
-        StringBuilder ans = new StringBuilder();
-
-        while(columnNumber > 0) {
-            columnNumber--;
-            // Get the last character and append it at the end of the string.
-            ans.insert(0, (char)((columnNumber) % 26 + 'A'));
-            columnNumber = (columnNumber) / 26;
+        StringBuilder result = new StringBuilder();
+        while (columnNumber > 0) {
+            int remainder = columnNumber % 26;
+            if (remainder == 0) {
+                remainder = 26;
+            }
+            columnNumber -= remainder;
+            columnNumber /= 26;
+            result.insert(0, (char) ('A' + remainder - 1));
         }
+        return result.toString();
+    }
 
-        // Reverse it, as we appended characters in reverse order.
-        return ans.toString();
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+
+//        System.out.println(solution.convertToTitle(1));
+//        System.out.println(solution.convertToTitle(28));
+        System.out.println(solution.convertToTitle(701));
     }
 }

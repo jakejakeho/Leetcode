@@ -3,59 +3,50 @@ package src.com.leetcode.s834;
 import java.util.*;
 
 class Solution {
+
+    private int[] ans, count;
+    List<Set<Integer>> graph;
+    int n;
+
     public int[] sumOfDistancesInTree(int n, int[][] edges) {
-        int[] dp = new int[n];
+        this.n = n;
+        ans = new int[n];
+        count = new int[n];
+        graph = new ArrayList<>(n);
+        Arrays.fill(count, 1);
 
-        Arrays.fill(dp, -1);
-        dp[0] = 0;
-
-        Map<Integer, Set<Integer>> map = new HashMap<>();
-        for (int[] edge : edges) {
-            map.computeIfAbsent(edge[0], (k) -> new HashSet<>());
-            map.computeIfAbsent(edge[1], (k) -> new HashSet<>());
-            map.get(edge[0]).add(edge[1]);
-            map.get(edge[1]).add(edge[0]);
-        }
-
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer()
-
-        for (int j = 0; j < n; j++) {
-            Set<Integer> visited = new HashSet<>();
-            dp[j] = distance(map, dp, 0, j, visited);
-        }
-
-
-        int[] sum = new int[n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i != j)
-                    sum[i] += dp[i][j];
-            }
+            graph.add(new HashSet<>());
         }
-        return sum;
+
+        for (int[] edge : edges) {
+            graph.get(edge[0]).add(edge[1]);
+            graph.get(edge[1]).add(edge[0]);
+        }
+
+        dfs(0, -1);
+        dfs2(0, -1);
+
+        return ans;
     }
 
-    private int distance(Map<Integer, Set<Integer>> map, int[][] dp, int current, int target, Set<Integer> visited) {
-        if (current == target) {
-            return 0;
-        }
-        if (dp[current][target] != -1) {
-            return dp[current][target];
-        }
-        visited.add(current);
-        Set<Integer> neighbours = map.getOrDefault(current, Collections.emptySet());
-        for (Integer neighbour : neighbours) {
-            if (!visited.contains(neighbour)) {
-
-                int nextDistance = distance(map, dp, neighbour, target, visited);
-                if (nextDistance != -1) {
-                    dp[current][target] = 1 + nextDistance;
-                    dp[target][current] = 1 + nextDistance;
-                }
+    private void dfs(int node, int parent) {
+        for (int child : graph.get(node)) {
+            if (child != parent) {
+                dfs(child, node);
+                count[node] += count[child];
+                ans[node] += ans[child] + count[child];
             }
         }
-        return dp[current][target];
+    }
+
+    public void dfs2(int node, int parent) {
+        for (int child : graph.get(node)) {
+            if (child != parent) {
+                ans[child] = ans[node] - count[child] + n - count[child];
+                dfs2(child, node);
+            }
+        }
     }
 
     public static void main(String[] args) {

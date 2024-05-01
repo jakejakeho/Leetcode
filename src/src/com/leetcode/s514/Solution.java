@@ -1,74 +1,38 @@
 package src.com.leetcode.s514;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.Arrays;
 
 class Solution {
-
     public int findRotateSteps(String ring, String key) {
-        Map<Character, List<Integer>> charMap = new HashMap<>();
-        char[] ringArr = ring.toCharArray();
-        for (int i = 0; i < ringArr.length; i++) {
-            charMap.computeIfAbsent(ringArr[i], (k) -> new ArrayList<>());
-            charMap.get(ringArr[i])
-                   .add(i);
+        int[] curr = new int[ring.length()];
+        int[] prev = new int[ring.length()];
+
+        for (int r = 0; r < ring.length(); r++) {
+            prev[r] = 0;
         }
-
-        int keyIndex = key.length() - 1;
-        char lastChar = key.charAt(keyIndex);
-        int min = Integer.MAX_VALUE;
-        for (int i : charMap.get(lastChar)) {
-            min = Math.min(min, dfs(ring, key, charMap, i, keyIndex));
-        }
-        return min;
-    }
-
-    private int dfs(String ring, String key, Map<Character, List<Integer>> charMap, int i, int keyIndex) {
-        if (keyIndex <= 0) {
-            return 1;
-        }
-
-        int nextKeyIndex = keyIndex - 1;
-        char nextKey = key.charAt(nextKeyIndex);
-
-        List<Integer> nextIndices = charMap.getOrDefault(nextKey, Collections.emptyList());
-
-        int minDistance = Integer.MAX_VALUE;
-        int nextI = -1;
-
-        for (int nextRingIndex : nextIndices) {
-            int clockwiseDistance = (i + ring.length() - nextRingIndex) % ring.length();
-            int antiClockwiseDistance = (nextRingIndex + ring.length() - i) % ring.length();
-            if (clockwiseDistance < minDistance) {
-                minDistance = clockwiseDistance;
-                nextI = nextRingIndex;
+        for (int k = key.length() - 1; k >= 0; k--) {
+            Arrays.fill(curr, Integer.MAX_VALUE);
+            for (int r = 0; r < ring.length(); r++) {
+                for (int r2 = 0; r2 < ring.length(); r2++) {
+                    if (ring.charAt(r2) == key.charAt(k)) {
+                        int clockwise = Math.abs(r - r2);
+                        int antiClockwise = ring.length() - clockwise;
+                        int min = Math.min(clockwise, antiClockwise);
+                        curr[r] = Math.min(curr[r], 1 + min + prev[r2]);
+                    }
+                }
             }
-
-            if (antiClockwiseDistance < minDistance) {
-                minDistance = antiClockwiseDistance;
-                nextI = nextRingIndex;
-            }
+            prev = curr.clone();
         }
-
-        return 1 + minDistance + dfs(ring, key, charMap, nextI, nextKeyIndex);
+        return prev[0];
     }
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int a1 = solution.findRotateSteps("godding", "gd");
-        int answer = a1;
-        int expected = 4;
-        System.out.printf("%d %d==%d %b%n\n", answer, answer, expected, answer == expected);
-        int a2 = solution.findRotateSteps("godding", "godding");
-        answer = a2;
-        expected = 13;
-        System.out.printf("%d %d==%d %b%n\n", answer, answer, expected, answer == expected);
-        int a3 = solution.findRotateSteps("edcba", "abcde");
-        answer = a3;
-        expected = 10;
-        System.out.printf("%d %d==%d %b%n\n", answer, answer, expected, answer == expected);
+        System.out.println(solution.findRotateSteps("godding", "gd"));
+        System.out.println(solution.findRotateSteps("godding", "godding"));
+        System.out.println(solution.findRotateSteps("edcba", "abcde"));
+        System.out.println(solution.findRotateSteps("ababcab", "acbaacba"));
     }
 }

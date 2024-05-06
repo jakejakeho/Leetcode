@@ -4,44 +4,55 @@ import java.util.Objects;
 class Solution {
 
     public String pushDominoes(String dominoes) {
-        String lastAfterPush = dominoes;
-        String currentAfterPush;
-        while (true) {
-            currentAfterPush = afterPush(lastAfterPush);
-            if (Objects.equals(currentAfterPush, lastAfterPush)) {
-                break;
-            }
-            lastAfterPush = currentAfterPush;
-        }
-        return currentAfterPush;
-    }
-
-    public String afterPush(String dominoes) {
-        StringBuilder stringBuilder = new StringBuilder();
         char[] dominoesArr = dominoes.toCharArray();
         for (int i = 0; i < dominoesArr.length; i++) {
-            if (i <= dominoesArr.length - 3 && dominoesArr[i] == 'R' && dominoesArr[i + 1] == '.'
-                && dominoesArr[i + 2] == 'L') {
-                stringBuilder.append(dominoesArr[i]);
-                stringBuilder.append(dominoesArr[i + 1]);
-                stringBuilder.append(dominoesArr[i + 2]);
-                i += 2;
-            } else if (i >= 1 && dominoesArr[i] == 'L' && dominoesArr[i - 1] == '.') {
-                stringBuilder.setCharAt(stringBuilder.length() - 1, 'L');
-                stringBuilder.append('L');
-            } else if (i <= dominoesArr.length - 2 && dominoesArr[i] == 'R' && dominoesArr[i + 1] == '.') {
-                stringBuilder.append('R');
-                stringBuilder.append('R');
-                i++;
-            } else {
-                stringBuilder.append(dominoesArr[i]);
+            if (dominoesArr[i] == 'L') {
+                int leftIndex = i - 1;
+                while (leftIndex >= 0 && dominoesArr[leftIndex] == '.' && (leftIndex - 1 < 0
+                    || dominoesArr[leftIndex - 1] != 'R')) {
+                    dominoesArr[leftIndex] = 'L';
+                    leftIndex--;
+                }
+            } else if (dominoesArr[i] == 'R') {
+                int nextSpecialIndex = i + 1;
+                while (nextSpecialIndex < dominoesArr.length && dominoesArr[nextSpecialIndex] == '.') {
+                    nextSpecialIndex++;
+                }
+                if (nextSpecialIndex < dominoesArr.length && dominoesArr[nextSpecialIndex] == 'L') {
+                    int spaceBetween = (nextSpecialIndex - i - 1);
+                    int numOfMoved = Math.floorDiv(spaceBetween, 2);
+                    int rightMoved = 0;
+                    while (rightMoved < numOfMoved) {
+                        dominoesArr[i + rightMoved + 1] = 'R';
+                        rightMoved++;
+                    }
+
+                    int leftMoved = 0;
+                    while (leftMoved < numOfMoved) {
+                        dominoesArr[nextSpecialIndex - leftMoved - 1] = 'L';
+                        leftMoved++;
+                    }
+
+                } else {
+                    int rightIndex = i + 1;
+                    while (rightIndex < nextSpecialIndex) {
+                        dominoesArr[rightIndex] = 'R';
+                        rightIndex++;
+                    }
+                }
             }
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < dominoesArr.length; i++) {
+            stringBuilder.append(dominoesArr[i]);
         }
         return stringBuilder.toString();
     }
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.pushDominoes(".L.R...LR..L.."));
+        System.out.println(solution.pushDominoes(".L.R."));
+        //System.out.println(solution.pushDominoes(".L.R...LR..L.."));
     }
 }

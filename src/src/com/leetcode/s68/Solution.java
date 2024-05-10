@@ -37,7 +37,7 @@ class Solution {
                     ceilSpace = spaceNeeded;
                     remainder = 0;
                 } else {
-                    ceilSpace = Math.ceilDiv(spaceNeeded, line.size() - 1);
+                    ceilSpace = (int)Math.ceil((double)spaceNeeded / (line.size() - 1));
                     remainder = spaceNeeded % (line.size() - 1);
                 }
                 StringBuilder sb = new StringBuilder();

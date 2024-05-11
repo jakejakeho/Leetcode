@@ -5,49 +5,37 @@ import java.util.*;
 class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
         Arrays.sort(nums);
-        return kSum(nums, target, 0, 4);
-    }
-
-    public List<List<Integer>> kSum(int[] nums, long target, int start, int k) {
-        List<List<Integer>> res = new ArrayList<>();
-
-        // If we have run out of numbers to add, return res.
-        if (start == nums.length) {
-            return res;
-        }
-
-        // There are k remaining values to add to the sum. The
-        // average of these values is at least target / k.
-        long average_value = target / k;
-
-        // We cannot obtain a sum of target if the smallest value
-        // in nums is greater than target / k or if the largest
-        // value in nums is smaller than target / k.
-        if (
-                nums[start] > average_value || average_value > nums[nums.length - 1]
-        ) {
-            return res;
-        }
-
-        if (k == 2) {
-            return twoSum(nums, target, start);
-        }
-
-        for (int i = start; i < nums.length; ++i) {
-            if (i == start || nums[i - 1] != nums[i]) {
-                for (List<Integer> subset : kSum(
-                        nums,
-                        target - nums[i],
-                        i + 1,
-                        k - 1
-                )) {
-                    res.add(new ArrayList<>(Arrays.asList(nums[i])));
-                    res.get(res.size() - 1).addAll(subset);
+        List<List<Integer>> result = new ArrayList<>();
+        long averageValue = target / 4;
+        if (nums[0] > averageValue || averageValue > nums[nums.length - 1])
+            return new ArrayList<>();
+        for (int i = 0; i < nums.length - 3; i++) {
+            if (i == 0 || nums[i - 1] != nums[i]) {
+                List<List<Integer>> threeSum = threeSum(nums, target - nums[i], i + 1);
+                for (List<Integer> threeIndex : threeSum) {
+                    threeIndex.add(nums[i]);
+                    result.add(threeIndex);
                 }
             }
         }
+        return result;
+    }
 
-        return res;
+    public List<List<Integer>> threeSum(int[] nums, long target, int startIndex) {
+        List<List<Integer>> result = new ArrayList<>();
+        long averageValue = target / 3;
+        if (nums[startIndex] > averageValue || averageValue > nums[nums.length - 1])
+            return new ArrayList<>();
+        for (int i = startIndex; i < nums.length - 2; i++) {
+            if (i == startIndex || nums[i - 1] != nums[i]) {
+                List<List<Integer>> twoSum = twoSum(nums, target - nums[i], i + 1);
+                for (List<Integer> twoIndex : twoSum) {
+                    twoIndex.add(nums[i]);
+                    result.add(twoIndex);
+                }
+            }
+        }
+        return result;
     }
 
     public List<List<Integer>> twoSum(int[] nums, long target, int start) {
@@ -57,7 +45,7 @@ class Solution {
         for (int i = start; i < nums.length; ++i) {
             if (res.isEmpty() || res.get(res.size() - 1).get(1) != nums[i]) {
                 if (s.contains(target - nums[i])) {
-                    res.add(Arrays.asList((int) target - nums[i], nums[i]));
+                    res.add(new ArrayList<>(List.of((int) target - nums[i], nums[i])));
                 }
             }
             s.add((long) nums[i]);

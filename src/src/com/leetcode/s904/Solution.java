@@ -11,7 +11,7 @@ class Solution {
         for (int right = 0; right < fruits.length; right++) {
             countMap.put(fruits[right], countMap.getOrDefault(fruits[right], 0) + 1);
             while (countMap.size() > 2) {
-                countMap.put(fruits[left], countMap.getOrDefault(fruits[left], 0) - 1);
+                countMap.put(fruits[left], countMap.get(fruits[left]) - 1);
                 if (countMap.get(fruits[left]) == 0) {
                     countMap.remove(fruits[left]);
                 }

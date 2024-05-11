@@ -23,6 +23,9 @@ class Solution {
 
     public List<List<Integer>> threeSum(int[] nums, long target, int startIndex) {
         List<List<Integer>> result = new ArrayList<>();
+        if (startIndex == nums.length) {
+            return result;
+        }
         long averageValue = target / 3;
         if (nums[startIndex] > averageValue || averageValue > nums[nums.length - 1])
             return new ArrayList<>();

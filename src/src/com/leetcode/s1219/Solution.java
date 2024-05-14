@@ -44,11 +44,11 @@ class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-//        System.out.println(solution.getMaximumGold(new int[][]{
-//                {0, 6, 0},
-//                {5, 8, 7},
-//                {0, 9, 0},
-//        }));
+        System.out.println(solution.getMaximumGold(new int[][]{
+                {0, 6, 0},
+                {5, 8, 7},
+                {0, 9, 0},
+        }));
         System.out.println(solution.getMaximumGold(new int[][]{
                 {1, 0, 7, 0, 0, 0},
                 {2, 0, 6, 0, 1, 0},

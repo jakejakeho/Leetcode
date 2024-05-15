@@ -1,35 +1,45 @@
 package src.com.leetcode.s735;
-import java.util.ArrayList;
+
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 
 class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < asteroids.length; i++) {
+            int asteroid = asteroids[i];
+            if (stack.isEmpty() || ((stack.peek() < 0 && asteroid > 0)
+                    || (stack.peek() > 0 && asteroid > 0)
+                    || (stack.peek() < 0 && asteroid < 0))) {
+                stack.push(asteroid);
+                continue;
+            }
+            while (!stack.isEmpty() && stack.peek() > 0 && asteroid < 0) {
+                if (Math.abs(stack.peek()) == Math.abs(asteroid)) {
+                    stack.pop();
+                    break;
+                } else if (Math.abs(stack.peek()) < Math.abs(asteroid)) {
+                    stack.pop();
+                    if (stack.isEmpty() || stack.peek() < 0)
+                        stack.push(asteroid);
+                } else {
+                    break;
+                }
+            }
+        }
+        int[] result = new int[stack.size()];
+        int index = 0;
+        for (Integer num : stack) {
+            result[index++] = num;
+        }
+        return result;
+    }
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(Arrays.toString(solution.asteroidCollision(new int[] {-2, 2, -1, -2})));
-    }
-
-    public int[] asteroidCollision(int[] asteroids) {
-        int n = asteroids.length;
-        int j = 0;
-        for (int i = 0; i < n; i++) {
-            int asteroid = asteroids[i];
-            while (j > 0 && asteroids[j - 1] > 0 && asteroid < 0 && asteroids[j - 1] < Math.abs(asteroid)) {
-                j--;
-            }
-
-            if (j == 0 || asteroid > 0 || asteroids[j -1] < 0) {
-                asteroids[j++] = asteroid;
-            } else if (asteroids[j - 1] == Math.abs(asteroid)){
-                j--;
-            }
-        }
-        int[] result = new int[j];
-        System.arraycopy(asteroids, 0, result, 0, j);
-
-        return result;
+        System.out.println(Arrays.toString(solution.asteroidCollision(new int[]{5, 10, -5})));
+        System.out.println(Arrays.toString(solution.asteroidCollision(new int[]{8, -8})));
+        System.out.println(Arrays.toString(solution.asteroidCollision(new int[]{10, 2, -5})));
+        System.out.println(Arrays.toString(solution.asteroidCollision(new int[]{-2, -2, 1, -2})));
     }
 }

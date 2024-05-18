@@ -22,8 +22,8 @@ class Solution {
                     num += (int) ((stack.pop() - '0') * Math.pow(10, digit++));
                 }
                 for (int i = 0; i < num; i++) {
-                    for (char c1 : temp.toString().toCharArray()) {
-                        stack.push(c1);
+                    for (int j = 0; j < temp.length(); j++) {
+                        stack.push(temp.charAt(j));
                     }
                 }
             }

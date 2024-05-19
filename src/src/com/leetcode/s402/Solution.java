@@ -1,40 +1,40 @@
 package src.com.leetcode.s402;
-
 import java.util.LinkedList;
 
 class Solution {
+
     public String removeKdigits(String num, int k) {
         LinkedList<Character> stack = new LinkedList<>();
-        for (char current : num.toCharArray()) {
-            while (k > 0 && !stack.isEmpty() && current < stack.peekLast()) {
-                k--;
+        int popped = 0;
+        for (char digit : num.toCharArray()) {
+            while (!stack.isEmpty() && popped < k && stack.peekLast() > digit) {
                 stack.removeLast();
+                popped++;
             }
-            stack.addLast(current);
+            stack.addLast(digit);
         }
 
-        while (k > 0) {
-            k--;
+        while (!stack.isEmpty() && popped < k) {
             stack.removeLast();
+            popped++;
         }
 
-        StringBuilder res = new StringBuilder();
-        boolean leadingZero = true;
-        for (char c : stack) {
-            if (leadingZero && c == '0') continue;
-            leadingZero = false;
-            res.append(c);
+        StringBuilder stringBuilder = new StringBuilder();
+        boolean isLeadingZero = true;
+        for (char digit: stack) {
+            if (isLeadingZero && digit == '0') continue;
+            isLeadingZero = false;
+            stringBuilder.append(digit);
         }
-        if (res.isEmpty()) return "0";
-        return res.toString();
+        if (stringBuilder.isEmpty()) {
+            return "0";
+        }
+        return stringBuilder.toString();
     }
 
     public static void main(String[] args) {
         Solution solution = new Solution();
         System.out.println(solution.removeKdigits("1432219", 3));
         System.out.println(solution.removeKdigits("10200", 1));
-        System.out.println(solution.removeKdigits("10", 2));
-        System.out.println(solution.removeKdigits("1", 1));
-        System.out.println(solution.removeKdigits("112", 1));
     }
 }

@@ -1,58 +1,42 @@
 package src.com.leetcode.s1209;
-import java.util.Stack;
 
 class Solution {
-
-    private static class Grouped {
-
-        char currentChar;
-
-        int count = 0;
-
-        @Override
-        public String toString() {
-            return "currentChar = " + currentChar + " count = " + count;
-        }
-    }
-
     public String removeDuplicates(String s, int k) {
-        Stack<Grouped> stack = new Stack<>();
-        for (int i = 0; i < s.length(); i++) {
-            if (stack.isEmpty()) {
-                Grouped grouped = new Grouped();
-                grouped.currentChar = s.charAt(i);
-                grouped.count++;
-                stack.push(grouped);
-            } else {
-                if (s.charAt(i) == stack.peek().currentChar) {
-                    stack.peek().count++;
+        char[] stack = new char[s.length()];
+        int stackIndex = -1;
+        int count = 1;
+        char[] sArr = s.toCharArray();
+        for (char c : sArr) {
+            if (stackIndex != -1) {
+                if (c == stack[stackIndex]) {
+                    count++;
                 } else {
-                    Grouped grouped = new Grouped();
-                    grouped.currentChar = s.charAt(i);
-                    grouped.count++;
-                    stack.push(grouped);
+                    count = 1;
                 }
             }
-            if (stack.peek().count == k) {
-                Grouped grouped = stack.pop();
-                System.out.println("popped = " + grouped);
-                System.out.println(stack);
-                while (stack.size() >= 2) {
-                    Grouped lastGroup = stack.pop();
-                    if (stack.peek().currentChar != lastGroup.currentChar) {
-                        break;
-                    }
-                    // merge
-                    stack.peek().count += lastGroup.count;
+            stack[++stackIndex] = c;
+            while (count == k) {
+                stackIndex -= k;
+                for (int temp = stackIndex + 1; temp <= stackIndex + k; temp++) {
+                    stack[temp] = '\u0000';
+                }
+                if (stackIndex < 0) {
+                    count = 1;
+                    stackIndex = -1;
+                    break;
+                }
+                char currentTop = stack[stackIndex];
+                int tempIndex = stackIndex;
+                count = 0;
+                while (tempIndex >= 0 && stack[tempIndex] == currentTop) {
+                    count++;
+                    tempIndex--;
                 }
             }
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        while (!stack.isEmpty()) {
-            Grouped grouped = stack.pop();
-            for (int i = 0; i < grouped.count; i++) {
-                stringBuilder.append(grouped.currentChar);
-            }
+        StringBuilder stringBuilder = new StringBuilder(stackIndex + 1);
+        for (int i = 0; i <= stackIndex; i++) {
+            stringBuilder.append(stack[i]);
         }
         return stringBuilder.toString();
     }

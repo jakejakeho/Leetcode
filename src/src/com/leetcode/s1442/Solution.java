@@ -1,3 +1,4 @@
+package src.com.leetcode.s1442;
 
 class Solution {
     public int countTriplets(int[] arr) {

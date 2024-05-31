@@ -7,9 +7,15 @@ class Solution {
         int xor = 0;
         for (int num : nums) {
             xor ^= num;
-            System.out.println(xor);
         }
-        return new int[]{};
+        int diff = xor & -xor;
+        int another = 0;
+        for (int num : nums) {
+            if ((diff & num) != 0) {
+                another ^= num;
+            }
+        }
+        return new int[]{another, xor ^ another};
     }
 
     public static void main(String[] args) {

@@ -18,15 +18,13 @@ class Solution {
 
     private boolean isGood(String word, int[] countMap) {
         int[] currentCount = new int[26];
-        boolean isGood = true;
         for (int i = 0; i < word.length(); i++) {
             int index = word.charAt(i) - 'a';
             currentCount[index]++;
             if (currentCount[index] > countMap[index]) {
-                isGood = false;
-                i = Integer.MAX_VALUE - 1;
+                return false;
             }
         }
-        return isGood;
+        return true;
     }
 }

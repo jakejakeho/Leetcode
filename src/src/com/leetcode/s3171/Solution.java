@@ -6,7 +6,7 @@ import java.util.Set;
 class Solution {
     public int minimumDifference(int[] nums, int k) {
         int min = Integer.MAX_VALUE;
-        Set[] dp = new HashSet[nums.length];
+        Set<Integer>[] dp = new HashSet[nums.length];
         for (int i = 0; i < dp.length; i++) {
             dp[i] = new HashSet<>();
         }
@@ -16,6 +16,7 @@ class Solution {
                 if (dp[j].contains(curr)) {
                     break;
                 }
+                dp[j].add(curr);
                 curr &= nums[j];
                 min = Math.min(min, Math.abs(k - curr));
             }

@@ -1,36 +1,36 @@
 package src.com.leetcode.s1700;
 
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 class Solution {
     public int countStudents(int[] students, int[] sandwiches) {
-        int numOfCircular = 0;
-        int numOfSquare = 0;
+        Queue<Integer> queue = new LinkedList<>();
         for (int student : students) {
-            if (student == 0) {
-                numOfCircular++;
-            } else if (student == 1) {
-                numOfSquare++;
-            }
+            queue.offer(student);
         }
 
-        int j = 0;
-        while (numOfCircular > 0 || numOfSquare > 0) {
-            int sandwich = sandwiches[j];
-            if (sandwich == 0 && numOfCircular > 0) {
-                j++;
-                numOfCircular--;
-            } else if (sandwich == 1 && numOfSquare > 0) {
-                j++;
-                numOfSquare--;
-            } else {
+        int sandwichIndex = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int student = queue.poll();
+                if (student != sandwiches[sandwichIndex]) {
+                    queue.offer(student);
+                } else {
+                    sandwichIndex++;
+                }
+            }
+            if (queue.size() == size) {
                 break;
             }
         }
-        return numOfCircular + numOfSquare;
+        return queue.size();
     }
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.countStudents(new int[]{1, 1, 1, 0, 0, 1}, new int[]{1, 0, 0, 0, 1, 1}));
+        System.out.println(solution.countStudents(new int[]{1, 1, 0, 0}, new int[]{0, 1, 0, 1}));
     }
 }

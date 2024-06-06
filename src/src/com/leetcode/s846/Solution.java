@@ -4,6 +4,10 @@ import java.util.*;
 
 class Solution {
     public boolean isNStraightHand(int[] hand, int groupSize) {
+        if (hand.length % groupSize != 0) {
+            return false;
+        }
+
         Map<Integer, Integer> countMap = new HashMap<>();
         for (int i = 0; i < hand.length; i++) {
             countMap.put(hand[i], countMap.getOrDefault(hand[i], 0) + 1);

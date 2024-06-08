@@ -4,16 +4,31 @@ import java.util.Arrays;
 
 class Solution {
     public int[] getSumAbsoluteDifferences(int[] nums) {
-        int[] result = new int[nums.length];
-        int[] prefixSum = new int[nums.length + 1];
+        int[] prefixSum = new int[nums.length];
+        int leftSum = 0;
         for (int i = 0; i < nums.length; i++) {
-            prefixSum[i + 1] = prefixSum[i] + nums[i];
+            leftSum += nums[i];
+            prefixSum[i] = leftSum;
         }
 
+        int[] result = new int[nums.length];
         for (int i = 0; i < nums.length; i++) {
-            result[i] = (i * nums[i]) - prefixSum[i] + (prefixSum[nums.length] - prefixSum[i + 1] - (nums.length - i - 1) * nums[i]);
+            int sum = 0;
+            if (i != 0) {
+                sum += i * nums[i];
+                sum -= prefixSum[i - 1];
+            }
+            if (i != nums.length - 1) {
+                sum += postfixSum(i , prefixSum);
+                sum -= (nums.length - 1 - i) * nums[i];
+            }
+            result[i] = sum;
         }
         return result;
+    }
+
+    public int postfixSum(int i, int[] prefixSum) {
+        return prefixSum[prefixSum.length - 1] - prefixSum[i];
     }
 
     public static void main(String[] args) {

@@ -2,20 +2,16 @@ package src.com.leetcode.s974;
 
 class Solution {
     public int subarraysDivByK(int[] nums, int k) {
-        int numOfSubArrays = 0;
-        int[] prefixSum = new int[nums.length + 1];
-        for (int i = 1; i <= nums.length; i++) {
-            prefixSum[i] += nums[i - 1];
+        int result = 0;
+        int prefixSum = 0;
+        int[] modGroup = new int[k];
+        modGroup[0] = 1;
+        for (int num : nums) {
+            prefixSum = ((prefixSum + num) % k + k) % k;
+            result += modGroup[prefixSum];
+            modGroup[prefixSum]++;
         }
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = i; j < nums.length; j++) {
-                int sum = prefixSum[nums.length] - prefixSum[i] - prefixSum[j + 1];
-                if (sum % k == 0) {
-                    numOfSubArrays++;
-                }
-            }
-        }
-        return numOfSubArrays;
+        return result;
     }
 
     public static void main(String[] args) {

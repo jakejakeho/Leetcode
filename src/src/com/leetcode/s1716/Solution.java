@@ -1,13 +1,6 @@
 package src.com.leetcode.s1716;
 class Solution {
     public int totalMoney(int n) {
-        if (n <= 7) {
-            int total = 0;
-            for (int i = 0; i < n; i++) {
-                total += i + 1;
-            }
-            return total;
-        }
         int total = 0;
         int firstWeekTotal = 0;
         for (int i = 1; i <= 7; i++) {

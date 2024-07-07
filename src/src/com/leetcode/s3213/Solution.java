@@ -1,5 +1,6 @@
 package src.com.leetcode.s3213;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,26 +37,34 @@ class Solution {
             else
                 pointer.cost = cost;
         }
-        int minCost = recursive(target, rootNode, 0);
+        int[] cache = new int[target.length()];
+        Arrays.fill(cache ,-1);
+        int minCost = recursive(target, rootNode, 0, cache);
+
         return minCost == Integer.MAX_VALUE ? -1 : minCost;
     }
 
-    private int recursive(String target, TrieNode rootNode, int index) {
+    private int recursive(String target, TrieNode rootNode, int index, int[] cache) {
         if (index >= target.length()) {
             return 0;
         }
+        if (cache[index] != -1) {
+            return cache[index];
+        }
+        int currentIndex = index;
         int minCost = Integer.MAX_VALUE;
         TrieNode pointer = rootNode;
         while (pointer != null && index < target.length() && pointer.map.containsKey(target.charAt(index))) {
             TrieNode nextPointer = pointer.map.get(target.charAt(index));
             if (nextPointer.isWord) {
-                int nextCost = recursive(target, rootNode, index + 1);
+                int nextCost = recursive(target, rootNode, index + 1, cache);
                 if (nextCost != Integer.MAX_VALUE)
                     minCost = Math.min(minCost, nextPointer.cost + nextCost);
             }
             index++;
             pointer = nextPointer;
         }
+        cache[currentIndex] = minCost;
         return minCost;
     }
 

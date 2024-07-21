@@ -2,16 +2,23 @@ package src.com.leetcode.s1614;
 
 class Solution {
     public int maxDepth(String s) {
-        int max = 0;
-        int current = 0;
+        int maxDepth = 0;
+        int currentDepth = 0;
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == '(') {
-                current++;
-                max = Math.max(current, max);
+                currentDepth++;
+                maxDepth = Math.max(maxDepth, currentDepth);
             } else if (s.charAt(i) == ')') {
-                current--;
+                currentDepth--;
             }
         }
-        return max;
+        return maxDepth;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.maxDepth("(1+(2*3)+((8)/4))+1"));
+        System.out.println(solution.maxDepth("(1)+((2))+(((3)))"));
+        System.out.println(solution.maxDepth("()(())((()()))"));
     }
 }

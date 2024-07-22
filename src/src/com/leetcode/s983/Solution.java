@@ -42,49 +42,26 @@ class Solution {
      * @return
      */
     public int mincostTickets(int[] days, int[] costs) {
-        int[] minCost = new int[days.length];
-        Arrays.fill(minCost, Integer.MAX_VALUE);
-        return dfs(days, costs, minCost, 0);
-    }
-
-    private int dfs(int[] days, int[] costs, int[] minCost, int i) {
-        if (i >= days.length) {
-            return 0;
-        }
-        if (minCost[i] != Integer.MAX_VALUE) {
-            return minCost[i];
-        }
-        int currentMinCost = Integer.MAX_VALUE;
-        // 1 day
-        currentMinCost = Math.min(currentMinCost, costs[0] + dfs(days, costs, minCost, i + 1));
-        // 7 days
-        int after7DaysRange = i + 1;
-        for (int j = i ; j < days.length; j++) {
-            if (days[j] < days[i] + 7) {
-                after7DaysRange = j + 1;
+        int lastDay = days[days.length - 1];
+        int[] dp = new int[lastDay + 1];
+        dp[0] = 0;
+        int index = 0;
+        for (int day = 1; day <= lastDay; day++) {
+            if (day < days[index]) {
+                dp[day] = dp[day - 1];
             } else {
-                break;
+                dp[day] = Math.min(costs[0] + dp[day - 1],
+                    Math.min(costs[1] + dp[Math.max(0, day - 7)], costs[2] + dp[Math.max(0, day - 30)]));
+                index++;
             }
         }
-        currentMinCost = Math.min(currentMinCost, costs[1] + dfs(days, costs, minCost, after7DaysRange));
-        // 30 days
-        int after30DaysRange = i + 1;
-        for (int j = i ; j < days.length; j++) {
-            if (days[j] < days[i] + 30) {
-                after30DaysRange = j + 1;
-            } else {
-                break;
-            }
-        }
-        currentMinCost = Math.min(currentMinCost, costs[2] + dfs(days, costs, minCost, after30DaysRange));
-
-        minCost[i] = currentMinCost;
-        return currentMinCost;
+        return dp[dp.length - 1];
     }
 
     public static void main(String[] args) {
         Solution solution = new Solution();
         System.out.println(solution.mincostTickets(new int[] {1, 4, 6, 7, 8, 20}, new int[] {2, 7, 15}));
-        System.out.println(solution.mincostTickets(new int[] {1,2,3,4,5,6,7,8,9,10,30,31}, new int[] {2, 7, 15}));
+        System.out.println(
+            solution.mincostTickets(new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 30, 31}, new int[] {2, 7, 15}));
     }
 }

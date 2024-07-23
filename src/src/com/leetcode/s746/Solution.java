@@ -1,33 +1,18 @@
 package src.com.leetcode.s746;
 
-import java.util.Arrays;
 
 class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int[] dp = new int[cost.length + 3];
+        for (int i = dp.length - 3; i >= 0; i--) {
+            int currentCost = i - 1 >= 0 ? cost[i - 1] : 0;
+            dp[i] = Math.min(currentCost + dp[i + 1], currentCost + dp[i + 2]);
+        }
+        return dp[0];
+    }
+
     public static void main(String[] args) {
         Solution solution = new Solution();
         System.out.println(solution.minCostClimbingStairs(new int[]{10, 15, 20}));
-    }
-
-    public int minCostClimbingStairs(int[] cost) {
-        int[] minCosts = new int[cost.length ];
-        Arrays.fill(minCosts, -1);
-        return dfs(cost, minCosts, -1);
-    }
-
-    private int dfs(int[] cost, int[] minCosts, int i) {
-        if (i >= cost.length) {
-            return 0;
-        }
-        if (i >= 0 && minCosts[i] != -1) {
-            return minCosts[i];
-        }
-        int currentCost = 0;
-        if (i != -1) {
-            currentCost = cost[i];
-        }
-        currentCost += Math.min(dfs(cost, minCosts, i + 1), dfs(cost, minCosts, i + 2));
-        if (i >= 0)
-            minCosts[i] = currentCost;
-        return currentCost;
     }
 }

@@ -33,7 +33,7 @@ class Solution {
         return result;
     }
 
-    double[] cache = new double[32];
+    double[] cache = new double[10];
 
     private double getCache(int digit) {
         return cache[digit];

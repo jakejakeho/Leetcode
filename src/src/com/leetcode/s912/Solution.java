@@ -3,63 +3,50 @@ package src.com.leetcode.s912;
 import java.util.Arrays;
 
 class Solution {
-
-    public static void main(String[] args) {
-        Solution solution = new Solution();
-        int[] nums = new int[]{5, 2, 3, 1,};
-        solution.sortArray(nums);
-        System.out.println(Arrays.toString(nums));
-    }
-
     public int[] sortArray(int[] nums) {
-        mergeSort(nums, 0, nums.length - 1);
-        return nums;
-    }
-
-    public void mergeSort(int[] nums, int left, int right) {
-        if (left >= right) {
-            return;
+        if (nums.length <= 1) {
+            return nums;
         }
 
-        int mid = (left + right) / 2;
-        mergeSort(nums, left, mid);
-        mergeSort(nums, mid + 1, right);
-        merge(nums, left, right);
+        int[] aArray = sortArray(subArray(nums, 0, nums.length / 2));
+        int[] bArray = sortArray(subArray(nums, nums.length / 2, nums.length));
+
+        return merge(aArray, bArray);
     }
 
-    public void merge(int[] nums, int left, int right) {
-        int[] merged = new int[(right - left) + 1];
-        int leftPointer = left;
-        int mid = (left + right) / 2;
-        int rightPointer = mid + 1;
+    private int[] merge(int[] aArray, int[] bArray) {
+        int[] mergeArray = new int[aArray.length + bArray.length];
 
-        int mergePointer = 0;
-        while (leftPointer <= mid && rightPointer <= right) {
-            if (nums[leftPointer] <= nums[rightPointer]) {
-                merged[mergePointer] = nums[leftPointer];
-                mergePointer++;
-                leftPointer++;
+        int mergeIndex = 0;
+        int aIndex = 0;
+        int bIndex = 0;
+
+        while (aIndex < aArray.length && bIndex < bArray.length) {
+            if (aArray[aIndex] <= bArray[bIndex]) {
+                mergeArray[mergeIndex++] = aArray[aIndex++];
             } else {
-                merged[mergePointer] = nums[rightPointer];
-                mergePointer++;
-                rightPointer++;
+                mergeArray[mergeIndex++] = bArray[bIndex++];
             }
         }
 
-        while (leftPointer <= mid) {
-            merged[mergePointer] = nums[leftPointer];
-            mergePointer++;
-            leftPointer++;
+        if (aIndex < aArray.length) {
+            System.arraycopy(aArray, aIndex, mergeArray, mergeIndex, aArray.length - aIndex);
         }
 
-        while (rightPointer <= right) {
-            merged[mergePointer] = nums[rightPointer];
-            mergePointer++;
-            rightPointer++;
+        if (bIndex < bArray.length) {
+            System.arraycopy(bArray, bIndex, mergeArray, mergeIndex, bArray.length - bIndex);
         }
 
-        for (int i = left; i <= right; i++) {
-            nums[i] = merged[i - left];
-        }
+        return mergeArray;
+    }
+
+    private int[] subArray(int[] nums, int startIndex, int endIndex) {
+        return Arrays.copyOfRange(nums, startIndex, endIndex);
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(Arrays.toString(solution.sortArray(new int[]{5, 2, 3, 1})));
+        System.out.println(Arrays.toString(solution.sortArray(new int[]{5, 1, 1, 2, 0, 0})));
     }
 }

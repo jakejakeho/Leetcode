@@ -5,35 +5,36 @@ import java.util.*;
 class Solution {
     public int findTheCity(int n, int[][] edges, int distanceThreshold) {
         List<int[]>[] adjacencyList = new ArrayList[n];
-        int[][] shortestPathMatrix = new int[n][n];
+        int[][] shortestPath = new int[n][n];
         for (int i = 0; i < n; i++) {
             adjacencyList[i] = new ArrayList<>();
+            Arrays.fill(shortestPath[i], Integer.MAX_VALUE);
+            shortestPath[i][i] = 0;
         }
+
         for (int[] edge : edges) {
             int from = edge[0];
             int to = edge[1];
-            int weight = edge[2];
-            adjacencyList[from].add(new int[]{to, weight});
-            adjacencyList[to].add(new int[]{from, weight});
+            int distance = edge[2];
+            adjacencyList[from].add(new int[]{to, distance});
+            adjacencyList[to].add(new int[]{from, distance});
         }
 
         for (int i = 0; i < n; i++) {
-            dijkstra(n, adjacencyList, shortestPathMatrix[i], i);
+            dijkstra(adjacencyList, shortestPath[i], i);
         }
-        return getCityWithFewestReachable(n, shortestPathMatrix, distanceThreshold);
+
+        return smallestCity(n, shortestPath, distanceThreshold);
     }
 
-    private int getCityWithFewestReachable(int n, int[][] shortestPathMatrix, int distanceThreshold) {
+    private int smallestCity(int n, int[][] shortestPath, int distanceThreshold) {
         int minReachable = Integer.MAX_VALUE;
         int minCity = -1;
         for (int i = 0; i < n; i++) {
             int reachable = 0;
-            for (int j = 0; j < shortestPathMatrix[i].length; j++) {
-                if (i != j) {
-                    int shortestDistance = shortestPathMatrix[i][j];
-                    if (shortestDistance <= distanceThreshold) {
-                        reachable++;
-                    }
+            for (int j = 0; j < n; j++) {
+                if (i != j && shortestPath[i][j] <= distanceThreshold) {
+                    reachable++;
                 }
             }
             if (reachable <= minReachable) {
@@ -44,30 +45,28 @@ class Solution {
         return minCity;
     }
 
-    private void dijkstra(int n, List<int[]>[] adjacencyList, int[] shortestPathMatrix, int i) {
+    private void dijkstra(List<int[]>[] adjacencyList, int[] shortestPath, int i) {
         PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(Comparator.comparing(a -> a[1]));
         priorityQueue.add(new int[]{i, 0});
-        Arrays.fill(shortestPathMatrix, Integer.MAX_VALUE);
-        ;
-        shortestPathMatrix[i] = 0;
         while (!priorityQueue.isEmpty()) {
             int[] current = priorityQueue.poll();
-            int currentCity = current[0];
+            int to = current[0];
             int distance = current[1];
-            if (distance > shortestPathMatrix[currentCity]) {
+            if (distance > shortestPath[to]) {
                 continue;
             }
 
-            for (int[] neighbour : adjacencyList[currentCity]) {
-                int neighbourCity = neighbour[0];
-                int weight = neighbour[1];
-                if (shortestPathMatrix[neighbourCity] > distance + weight) {
-                    shortestPathMatrix[neighbourCity] = distance + weight;
-                    priorityQueue.add(new int[]{neighbourCity, shortestPathMatrix[neighbourCity]});
+            for (int[] edge : adjacencyList[to]) {
+                int nextCity = edge[0];
+                int nextDistance = edge[1];
+                if (shortestPath[nextCity] > distance + nextDistance) {
+                    shortestPath[nextCity] = distance + nextDistance;
+                    priorityQueue.add(new int[]{nextCity, distance + nextDistance});
                 }
             }
         }
     }
+
 
     public static void main(String[] args) {
         Solution solution = new Solution();

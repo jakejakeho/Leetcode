@@ -2,13 +2,16 @@ package src.com.leetcode.s2486;
 
 class Solution {
     public int appendCharacters(String s, String t) {
-        int tIndex = 0;
-        for (int i = 0; tIndex < t.length() && i < s.length(); i++) {
-            if (s.charAt(i) == t.charAt(tIndex)) {
-                tIndex++;
+        int tPointer = 0;
+        for (int sPointer = 0; sPointer < s.length(); sPointer++) {
+            if (s.charAt(sPointer) == t.charAt(tPointer)) {
+                tPointer++;
+            }
+            if (tPointer >= t.length()) {
+                break;
             }
         }
-        return t.length() - tIndex;
+        return t.length() - tPointer;
     }
 
     public static void main(String[] args) {

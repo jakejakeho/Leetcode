@@ -1,22 +1,25 @@
 package src.com.leetcode.s409;
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
+
     public int longestPalindrome(String s) {
-        int[] countMap = new int[200];
+        Map<Character, Integer> map = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
-            countMap[s.charAt(i)]++;
+            char c = s.charAt(i);
+            map.put(c, map.getOrDefault(c, 0) + 1);
         }
 
         int longest = 0;
         boolean hasSingleChar = false;
-        for (int i = 0; i < countMap.length; i++) {
-            if (countMap[i] > 0) {
-                longest += (countMap[i] / 2) * 2;
-                hasSingleChar |= countMap[i] % 2 == 1;
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() % 2 == 1) {
+                hasSingleChar = true;
             }
+            longest += entry.getValue() / 2 * 2;
         }
-        longest += hasSingleChar ? 1 : 0;
-        return longest;
+        return longest + (hasSingleChar ? 1 : 0);
     }
 
     public static void main(String[] args) {
@@ -24,4 +27,4 @@ class Solution {
         System.out.println(solution.longestPalindrome("abccccdd"));
         System.out.println(solution.longestPalindrome("a"));
     }
-};
+}

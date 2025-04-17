@@ -8,8 +8,15 @@ class Solution {
     private static final Set<Character> VOWEL_SET = new HashSet<>(Arrays.asList('a', 'e', 'i', 'o', 'u'));
 
     public int[] vowelStrings(String[] words, int[][] queries) {
+        int upperRange = 0;
+        int lowerRange = words.length - 1;
+        for (int[] query : queries) {
+            upperRange = Math.max(upperRange, query[1]);
+            lowerRange = Math.min(lowerRange, query[0]);
+        }
+
         boolean[] isVowel = new boolean[words.length];
-        for (int i = 0; i < words.length; i++) {
+        for (int i = lowerRange; i <= upperRange; i++) {
             String word = words[i];
             if (VOWEL_SET.contains(word.charAt(0)) && VOWEL_SET.contains(word.charAt(word.length() - 1))) {
                 isVowel[i] = true;
@@ -28,9 +35,7 @@ class Solution {
         for (int i = 0; i < queries.length; i++) {
             int lower = queries[i][0];
             int upper = queries[i][1];
-            if (lower >= 0 && lower < words.length && upper >= 0 && upper < words.length) {
-                result[i] = isVowelTotal[upper + 1] - isVowelTotal[lower];
-            }
+            result[i] = isVowelTotal[upper + 1] - isVowelTotal[lower];
         }
         return result;
     }

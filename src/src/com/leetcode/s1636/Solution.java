@@ -3,22 +3,35 @@ package src.com.leetcode.s1636;
 import java.util.*;
 
 class Solution {
+
+    record Pair(int key, int value) {
+    }
+
     public int[] frequencySort(int[] nums) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int num : nums) {
             map.put(num, map.getOrDefault(num, 0) + 1);
         }
-        List<Map.Entry<Integer, Integer>> entries = new ArrayList<>(map.entrySet());
-        entries.sort((a, b) -> {
-            if (Objects.equals(a.getValue(), b.getValue())) {
-                return b.getKey() - a.getKey();
+
+        List<Pair> sorted = new ArrayList<>(map.size());
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            sorted.add(new Pair(entry.getValue(), entry.getKey()));
+        }
+        sorted.sort((a, b) -> {
+            int aFreq = a.key;
+            int bFreq = b.key;
+            if (aFreq == bFreq) {
+                return b.value - a.value;
             }
-            return a.getValue() - b.getValue();
+            return a.key - b.key;
         });
+
         int index = 0;
-        for (var entry : entries) {
-            for (int i = 0; i < entry.getValue(); i++) {
-                nums[index++] = entry.getKey();
+        for (int i = 0; i < sorted.size(); i++) {
+            int freq = sorted.get(i).key;
+            int value = sorted.get(i).value;
+            for (int j = 0; j < freq; j++) {
+                nums[index++] = value;
             }
         }
         return nums;

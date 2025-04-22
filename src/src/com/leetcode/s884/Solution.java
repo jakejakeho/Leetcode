@@ -12,8 +12,6 @@ class Solution {
         Map<String, Integer> s2Map = new HashMap<>();
         String[] s1Arr = s1.split(" ");
         String[] s2Arr = s2.split(" ");
-        System.out.println(Arrays.toString(s1Arr));
-        System.out.println(Arrays.toString(s2Arr));
         for (int i = 0; i < s1Arr.length; i++) {
             String w1 = s1Arr[i];
             s1Map.put(w1, s1Map.getOrDefault(w1, 0) + 1);
@@ -23,8 +21,6 @@ class Solution {
             String w2 = s2Arr[i];
             s2Map.put(w2, s2Map.getOrDefault(w2, 0) + 1);
         }
-        System.out.println(s1Map);
-        System.out.println(s2Map);
         List<String> unCommonWordList = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : s1Map.entrySet()) {
             String key = entry.getKey();

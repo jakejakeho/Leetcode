@@ -1,4 +1,4 @@
-package src.com.leetcode150.arraysHashing.Q4GroupAnagrams;
+package src.com.leetcode150.ArraysHashing.Q4GroupAnagrams;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

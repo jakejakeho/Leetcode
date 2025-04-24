@@ -1,4 +1,4 @@
-package src.com.leetcode150.arraysHashing.Q6EncodeAndDecodeStrings;
+package src.com.leetcode150.ArraysHashing.Q6EncodeAndDecodeStrings;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

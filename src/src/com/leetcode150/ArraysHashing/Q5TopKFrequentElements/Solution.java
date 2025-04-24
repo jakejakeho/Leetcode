@@ -1,4 +1,4 @@
-package src.com.leetcode150.arraysHashing.Q5TopKFrequentElements;
+package src.com.leetcode150.ArraysHashing.Q5TopKFrequentElements;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;

@@ -1,4 +1,4 @@
-package src.com.leetcode150.arraysHashing.Q8ValidSudoku;
+package src.com.leetcode150.ArraysHashing.Q8ValidSudoku;
 class Solution {
 
     public boolean isValidSudoku(char[][] board) {

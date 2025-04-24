@@ -1,4 +1,4 @@
-package src.com.leetcode150.arraysHashing.Q7ProductsofArrayExceptSelf;
+package src.com.leetcode150.ArraysHashing.Q7ProductsofArrayExceptSelf;
 import java.util.Arrays;
 
 class Solution {

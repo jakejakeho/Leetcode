@@ -1,4 +1,4 @@
-package src.com.leetcode150.arraysHashing.Q2ValidAnagram;
+package src.com.leetcode150.ArraysHashing.Q2ValidAnagram;
 import java.util.HashMap;
 import java.util.Map;
 

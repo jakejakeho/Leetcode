@@ -1,4 +1,4 @@
-package src.com.leetcode150.arraysHashing.Q9LongestConsecutiveSequence;
+package src.com.leetcode150.ArraysHashing.Q9LongestConsecutiveSequence;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package src.com.leetcode150.arraysHashing.Q1ContainsDuplicate;
+package src.com.leetcode150.ArraysHashing.Q1ContainsDuplicate;
 
 import java.util.HashSet;
 import java.util.Set;

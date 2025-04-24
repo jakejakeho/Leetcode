@@ -1,4 +1,4 @@
-package src.com.leetcode150.arraysHashing.Q3TwoSum;
+package src.com.leetcode150.ArraysHashing.Q3TwoSum;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

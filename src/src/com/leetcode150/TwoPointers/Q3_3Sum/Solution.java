@@ -1,4 +1,4 @@
-package src.com.leetcode150.TwoPointers.Q33Sum;
+package src.com.leetcode150.TwoPointers.Q3_3Sum;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

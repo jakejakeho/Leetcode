@@ -1,4 +1,4 @@
-package src.com.leetcode150.TwoPointers.Q2TwoSumII;
+package src.com.leetcode150.TwoPointers.Q2_TwoSumII;
 import java.util.Arrays;
 
 class Solution {

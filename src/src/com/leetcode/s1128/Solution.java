@@ -6,9 +6,9 @@ import java.util.Map;
 class Solution {
     public int numEquivDominoPairs(int[][] dominoes) {
         int total = 0;
-        Map<String, Integer> count = new HashMap<>();
+        Map<Integer, Integer> count = new HashMap<>();
         for (int[] domino : dominoes) {
-            String key = domino[0] <= domino[1] ? domino[0] + "-" + domino[1] : domino[1] + "-" + domino[0];
+            Integer key = domino[0] <= domino[1] ? 10 * domino[0] + domino[1] : 10 * domino[1] + domino[0];
             Integer original = count.getOrDefault(key, 0);
             total += original;
             count.put(key, original + 1);

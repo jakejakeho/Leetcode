@@ -1,41 +1,33 @@
 package src.com.leetcode150.T4_Stack.Q4_GenerateParentheses;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 class Solution {
+
     public List<String> generateParenthesis(int n) {
+        if (n < 1) {return List.of();}
         List<String> result = new ArrayList<>();
-        recursion(0, n, result, "");
+        recursion(n, 0, result, new StringBuilder());
         return result;
     }
 
-    private void recursion(int i, int n, List<String> result, String s) {
-        if (i == 2 * n) {
-            if (isValid(s)) {
-                result.add(s);
-            }
+    private void recursion(int availableOpen, int availableClose, List<String> result, StringBuilder s) {
+        if (availableOpen == 0 && availableClose == 0) {
+            result.add(s.toString());
             return;
         }
         // '('
-        recursion(i + 1, n, result, s + '(');
-        // ')'
-        recursion(i + 1, n, result, s + ')');
-    }
-
-    private boolean isValid(String s) {
-        Stack<Character> stack = new Stack<>();
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '(') {
-                stack.push(s.charAt(i));
-            } else {
-                if (!stack.isEmpty())
-                    stack.pop();
-                else
-                    return false;
-            }
+        if (availableOpen > 0) {
+            s.append('(');
+            recursion(availableOpen - 1, availableClose + 1, result, s);
+            s.deleteCharAt(s.length() - 1);
         }
-        return stack.isEmpty();
+        // ')'
+        if (availableClose > 0) {
+            s.append(')');
+            recursion(availableOpen, availableClose - 1, result, s);
+            s.deleteCharAt(s.length() - 1);
+        }
     }
 
     public static void main(String[] args) {

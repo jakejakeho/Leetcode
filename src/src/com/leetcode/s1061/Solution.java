@@ -17,12 +17,15 @@ class Solution {
             if (!s1Exist && !s2Exist) {
                 set = new HashSet<>();
             } else if (s1Exist && s2Exist) {
-                set = map.get(s1Arr[i]);
-                set.addAll(map.get(s2Arr[i]));
+                Set<Character> set1 = map.get(s1Arr[i]);
                 Set<Character> set2 = map.get(s2Arr[i]);
-                for (Character c : set2) {
-                    map.put(c, set);
+                if (set1 != set2) {
+                    set1.addAll(map.get(s2Arr[i]));
+                    for (Character c : set2) {
+                        map.put(c, set1);
+                    }
                 }
+                set = set1;
             } else if (s1Exist) {
                 set = map.get(s1Arr[i]);
             } else {

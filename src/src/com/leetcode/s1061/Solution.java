@@ -49,7 +49,7 @@ class Solution {
 
         StringBuilder stringBuilder = new StringBuilder(baseStr.length());
         char[] baseStrArr = baseStr.toCharArray();
-        for (int i = 0;  i< baseStrArr.length; i++) {
+        for (int i = 0; i < baseStrArr.length; i++) {
             if (sortedMap.containsKey(baseStrArr[i])) {
                 stringBuilder.append(sortedMap.get(baseStrArr[i]));
             } else {

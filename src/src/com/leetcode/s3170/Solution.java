@@ -1,44 +1,52 @@
 package src.com.leetcode.s3170;
-
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
 
 class Solution {
 
-    private class Data {
-        char charToDelete;
+    public class Data {
+
+        char c;
+
         int index;
+
+        public Data(char c, int index) {
+            this.c = c;
+            this.index = index;
+        }
     }
 
     public String clearStars(String s) {
-        List<Stack<Integer>> countMap = new ArrayList<>(26);
+        Stack<Data>[] stacks = new Stack[26];
         for (int i = 0; i < 26; i++) {
-            countMap.add(new Stack<>());
+            stacks[i] = new Stack<>();
         }
-        Set<Integer> indicesToDelete = new HashSet<>();
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '*') {
-                for (int j = 0; j < 26; j++) {
-                    if (!countMap.get(j).isEmpty()) {
-                        indicesToDelete.add(countMap.get(j).pop());
+        char[] sArr = s.toCharArray();
+        Set<Integer> deleteSet = new HashSet<>();
+        for (int i = 0; i < sArr.length; i++) {
+            char c = sArr[i];
+            if (c != '*') {
+                stacks[c - 'a'].push(new Data(c, i));
+            } else {
+                for (int j = 0; j < stacks.length; j++) {
+                    if (!stacks[j].isEmpty()) {
+                        deleteSet.add(stacks[j].pop().index);
                         break;
                     }
                 }
-            } else {
-                countMap.get(s.charAt(i) - 'a').push(i);
             }
         }
-        if (indicesToDelete.isEmpty()) {
-            return s;
-        }
+
+        int deleted = 0;
         StringBuilder stringBuilder = new StringBuilder();
-        int deleteIndex = 0;
         for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != '*') {
-                if (deleteIndex < indicesToDelete.size() && indicesToDelete.contains(i)) {
-                    deleteIndex++;
-                } else {
-                    stringBuilder.append(s.charAt(i));
-                }
+            if (s.charAt(i) == '*')
+                continue;
+            if (deleted < deleteSet.size() && deleteSet.contains(i)) {
+                deleted++;
+            } else {
+                stringBuilder.append(s.charAt(i));
             }
         }
         return stringBuilder.toString();
@@ -46,6 +54,7 @@ class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.clearStars("ee**"));
+        System.out.println(solution.clearStars("aaba*"));
+        System.out.println(solution.clearStars("abc"));
     }
 }

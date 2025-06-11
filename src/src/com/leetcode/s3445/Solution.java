@@ -2,7 +2,7 @@ package src.com.leetcode.s3445;
 
 class Solution {
     public int maxDifference(String s, int k) {
-        int maxDiff = -1;
+        int maxDiff = Integer.MIN_VALUE;
         for (int l = k; l <= s.length(); l++) {
             int[] count = new int[5];
             for (int i = 0; i < l; i++) {
@@ -38,9 +38,9 @@ class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-//        System.out.println(solution.maxDifference("12233", 4));
-//        System.out.println(solution.maxDifference("1122211", 3));
-//        System.out.println(solution.maxDifference("110", 3));
+        System.out.println(solution.maxDifference("12233", 4));
+        System.out.println(solution.maxDifference("1122211", 3));
+        System.out.println(solution.maxDifference("110", 3));
         System.out.println(solution.maxDifference("330130303114333", 13));
     }
 }

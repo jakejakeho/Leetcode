@@ -13,8 +13,7 @@ class Solution {
             char secondChar = checkLogics[0][1];
             if (sb.charAt(i) == firstChar && sb.charAt(i + 1) == secondChar) {
                 totalScore += Math.max(x, y);
-                sb.deleteCharAt(i);
-                sb.deleteCharAt(i);
+                sb.delete(i, i + 2);
                 i = Math.max(-1, i - 2);
             }
 
@@ -25,8 +24,7 @@ class Solution {
             char secondChar = checkLogics[1][1];
             if (sb.charAt(i) == firstChar && sb.charAt(i + 1) == secondChar) {
                 totalScore += Math.min(x, y);
-                sb.deleteCharAt(i);
-                sb.deleteCharAt(i);
+                sb.delete(i, i + 2);
                 i = Math.max(-1, i - 2);
             }
         }
